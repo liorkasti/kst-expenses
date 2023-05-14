@@ -7,7 +7,7 @@ import AppNavigation from './AppNavigation';
 
 const RootStack = createNativeStackNavigator();
 
-const RootStackScreen = ({navigation}) => (
+const RootStackScreen = () => (
   <NavigationContainer>
     <RootStack.Navigator headerMode="none">
       <RootStack.Screen name="WelcomeScreen" component={WelcomeScreen} />
