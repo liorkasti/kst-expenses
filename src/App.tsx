@@ -1,9 +1,9 @@
 import React from 'react';
 
-import AppNavigation from './navigation/AppNavigation';
+import RootStackScreen from './navigation';
 
 const App = () => {
-  return <AppNavigation />;
+  return <RootStackScreen />;
 };
 
 export default App;
