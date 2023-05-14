@@ -9,7 +9,6 @@ import {
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import AppNavigation from './AppNavigation';
 import {COLOR} from '../utils/constance';
 
 interface WelcomeScreenProps {
@@ -17,8 +16,8 @@ interface WelcomeScreenProps {
 }
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
-  onSaveName,
   navigation,
+  onSaveName,
 }) => {
   const [name, setName] = useState('');
 
@@ -44,10 +43,10 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to My App</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter your name"
+        placeholder="Enter name"
+        placeholderTextColor={COLOR.placeholder}
         value={name}
         onChangeText={setName}
       />
@@ -71,25 +70,26 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 8,
-    padding: 8,
-    marginBottom: 16,
+    borderColor: COLOR.thirdary,
+    borderRadius: 3,
+    paddingTop: 28,
+    paddingHorizontal: 10,
     width: '80%',
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: 16,
   },
   button: {
     position: 'absolute',
-    backgroundColor: COLOR.primary,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
+    backgroundColor: COLOR.thirdary,
+    paddingHorizontal: 52,
+    paddingVertical: 15,
+    borderRadius: 50,
     bottom: 61,
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
+    fontWeight: 700,
   },
 });
 
