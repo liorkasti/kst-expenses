@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useLayoutEffect} from 'react';
 import {
   Modal,
   Image,
@@ -39,6 +39,7 @@ const AppNavigation = ({navigation}) => {
         name={'Home'}
         component={HomeScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused}) => (
             <Text style={{color: focused ? COLOR.primary : COLOR.secondary}}>
               Home
@@ -50,6 +51,7 @@ const AppNavigation = ({navigation}) => {
         name={'AddExpense'}
         component={AddExpense}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused}) => (
             <View>
               <TouchableOpacity onPress={handleOpenModal}>
@@ -92,6 +94,7 @@ const AppNavigation = ({navigation}) => {
         name={'Profile'}
         component={ProfileScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused}) => (
             <Text style={{color: focused ? COLOR.primary : COLOR.secondary}}>
               Profile

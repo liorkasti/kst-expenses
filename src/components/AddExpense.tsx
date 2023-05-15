@@ -6,9 +6,9 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
-import {addExpense} from '../redux/actions';
-import {Expense} from '../redux/types';
+// import {useDispatch} from 'react-redux';
+// import {addExpense} from '../redux/expenses/actions';
+// import {Expense} from '../redux/expenses/types';
 
 import {COLOR} from '../utils/constance';
 import close from '../assets/close.png';
@@ -19,19 +19,19 @@ interface AddExpenseModalProps {
 }
 
 const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
 
   const handleCreate = () => {
-    const newExpense: Expense = {
-      id: Date.now().toString(),
-      title,
-      amount: parseFloat(amount),
-      date: new Date(date),
-    };
-    dispatch(addExpense(newExpense));
+    // const newExpense: Expense = {
+    //   id: Date.now().toString(),
+    //   title,
+    //   amount: parseFloat(amount),
+    //   date: new Date(date),
+    // };
+    // dispatch(addExpense(newExpense));
     setTitle('');
     setAmount('');
     setDate('');
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: '700',
+    textAlign: 'center',
   },
 });
 

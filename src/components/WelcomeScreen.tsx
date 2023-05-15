@@ -8,7 +8,9 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
 
+import {storeUser} from '../redux/actions';
 import {COLOR} from '../utils/constance';
 
 interface WelcomeScreenProps {
@@ -21,16 +23,15 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 }) => {
   const [name, setName] = useState('');
 
+  const dispatch = useDispatch();
+
   const handleLoginPress = async () => {
     const isValidName = /^[A-Za-z]{2,20}$/.test(name);
     if (isValidName) {
       try {
-        // const response = await axios.post('http://localhost:3000/users', {
-        //   name,
-        // });
-        // const {id} = response.data;
         await AsyncStorage.setItem('user', JSON.stringify({name}));
-        // onSaeName(name, id);
+        dispatch(storeUser(name));
+        // onSaveName(name, Math.random().toString(36).substr(2, 5));
         navigation.navigate('AppNavigation');
       } catch (error) {
         console.error(error);
