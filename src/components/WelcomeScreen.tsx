@@ -22,7 +22,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   const [name, setName] = useState('');
 
   const handleLoginPress = async () => {
-    const isValidName = /^[A-Za-z]{3,20}$/.test(name);
+    const isValidName = /^[A-Za-z]{2,20}$/.test(name);
     if (isValidName) {
       try {
         // const response = await axios.post('http://localhost:3000/users', {
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     borderColor: COLOR.thirdary,
     borderRadius: 3,
     paddingTop: 28,
+    paddingBottom: 9,
     paddingHorizontal: 10,
     width: '80%',
     textAlign: 'left',
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 700,
+    fontWeight: '700',
   },
 });
 

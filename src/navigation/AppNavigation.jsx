@@ -1,28 +1,35 @@
-import React, {useRef} from 'react';
+import React, {useState} from 'react';
 import {
-  Animated,
-  Dimensions,
+  Modal,
   Image,
   Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Pressable,
 } from 'react-native';
 import 'react-native-gesture-handler';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import HomeScreen from '../components/HomeScreen';
-import WelcomeScreen from '../components/WelcomeScreen';
 import ProfileScreen from '../components/ProfileScreen';
-import AddExpenseModal from '../components/AddExpenseModal';
+import AddExpense from '../components/AddExpense';
 import plus from '../assets/plusExpense.png';
 import {COLOR} from '../utils/constance';
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigation = ({navigation}) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -40,31 +47,43 @@ const AppNavigation = ({navigation}) => {
         }}
       />
       <Tab.Screen
-        name={'ActionButton'}
-        component={AddExpenseModal}
+        name={'AddExpense'}
+        component={AddExpense}
         options={{
           tabBarIcon: ({focused}) => (
-            <TouchableOpacity>
-              <View
-                style={{
-                  width: 55,
-                  height: 55,
-                  backgroundColor: COLOR.primary,
-                  borderRadius: 30,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginBottom: Platform.OS == 'android' ? 50 : 30,
-                }}>
-                <Image
-                  source={plus}
+            <View>
+              <TouchableOpacity onPress={handleOpenModal}>
+                <View
                   style={{
-                    width: 32,
-                    height: 32,
-                    tintColor: 'white',
-                  }}
-                />
-              </View>
-            </TouchableOpacity>
+                    width: 55,
+                    height: 55,
+                    backgroundColor: COLOR.primary,
+                    borderRadius: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: Platform.OS == 'android' ? 50 : 30,
+                  }}>
+                  <Image
+                    source={plus}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      tintColor: 'white',
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <Modal
+                visible={isModalOpen}
+                onRequestClose={handleCloseModal}
+                animationType="slide"
+                transparent={true}
+                style={{}}
+                statusBarTranslucent={true}>
+                <AddExpense onClose={handleCloseModal} />
+              </Modal>
+            </View>
           ),
         }}
       />

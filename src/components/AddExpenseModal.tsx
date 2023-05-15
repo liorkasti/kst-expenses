@@ -1,16 +1,34 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, {useState} from 'react';
+import {Modal, View, Text, TextInput, TouchableOpacity} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {addExpense} from '../redux/actions';
+import {Expense} from '../redux/types';
+import {AddExpense} from './AddExpense';
 
-type Props = {}
-
-const AddExpenseModal = (props: Props) => {
-  return (
-    <View>
-      <Text>AddExpenseModal</Text>
-    </View>
-  )
+interface AddExpenseModalProps {
+  visible: boolean;
+  onClose: () => void;
 }
+const AddExpenseModal: React.FC<AddExpenseModalProps> = () => {
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
-export default AddExpenseModal
+  console.log({isModalOpen});
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
 
-const styles = StyleSheet.create({})
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <Modal
+      visible={isModalOpen}
+      onRequestClose={handleCloseModal}
+      animationType="slide">
+      <AddExpense onClose={handleCloseModal} />
+    </Modal>
+  );
+};
+
+export default AddExpenseModal;
