@@ -9,7 +9,7 @@ import AppNavigation from './AppNavigation';
 const RootStack = createNativeStackNavigator();
 
 const RootStackScreen = () => {
-  const {username} = useSelector(state => state.reducers);
+  const {username} = useSelector(state => state.user);
   return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{headerShown: false}}>

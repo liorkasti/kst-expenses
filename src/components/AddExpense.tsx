@@ -6,11 +6,12 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-// import {useDispatch} from 'react-redux';
-// import {addExpense} from '../redux/expenses/actions';
-// import {Expense} from '../redux/expenses/types';
+import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {COLOR} from '../utils/constance';
+import {Expense} from '../redux/types';
+import {addExpense} from '../redux/expensesReducer';
+import {COLORS} from '../utils/constance';
 import close from '../assets/close.png';
 
 interface AddExpenseModalProps {
@@ -19,25 +20,39 @@ interface AddExpenseModalProps {
 }
 
 const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
-  // const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
 
-  const handleCreate = () => {
-    // const newExpense: Expense = {
-    //   id: Date.now().toString(),
-    //   title,
-    //   amount: parseFloat(amount),
-    //   date: new Date(date),
-    // };
-    // dispatch(addExpense(newExpense));
-    setTitle('');
-    setAmount('');
-    setDate('');
-    onClose();
+  const dispatch = useDispatch();
+  const {expenses} = useSelector(state => state.expenses);
+
+  const handleCreate = async () => {
+    try {
+      const newExpense: Expense = {
+        id: Date.now().toString(),
+        title,
+        amount: parseFloat(amount),
+        date: new Date(date),
+      };
+      // Saving the expense to AsyncStorage
+      const savedExpenses = await AsyncStorage.getItem('expenses');
+      console.log({savedExpenses});
+      let expenses = savedExpenses ? JSON.parse(savedExpenses) : [];
+      expenses.push(newExpense);
+      await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
+
+      dispatch(addExpense(newExpense));
+      setTitle('');
+      setAmount('');
+      setDate('');
+      onClose();
+    } catch (error) {
+      console.log('Error saving expense:', error);
+    }
   };
 
+  console.log({expenses});
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -57,14 +72,14 @@ const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
         <TextInput
           style={styles.input}
           placeholder="Title"
-          placeholderTextColor={COLOR.placeholder}
+          placeholderTextColor={COLORS.placeholder}
           value={title}
           onChangeText={setTitle}
         />
         <TextInput
           style={styles.input}
           placeholder="Amount"
-          placeholderTextColor={COLOR.placeholder}
+          placeholderTextColor={COLORS.placeholder}
           value={amount}
           onChangeText={setAmount}
           keyboardType="numeric"
@@ -72,7 +87,7 @@ const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
         <TextInput
           style={styles.input}
           placeholder="Date"
-          placeholderTextColor={COLOR.placeholder}
+          placeholderTextColor={COLORS.placeholder}
           value={date}
           onChangeText={setDate}
         />
@@ -130,7 +145,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 114,
     right: 114,
-    backgroundColor: COLOR.thirdary,
+    backgroundColor: COLORS.thirdary,
     paddingHorizontal: 52,
     paddingVertical: 15,
     borderRadius: 50,

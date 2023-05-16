@@ -8,10 +8,10 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
-import {storeUser} from '../redux/actions';
-import {COLOR} from '../utils/constance';
+import {storeUser} from '../redux/userReducer';
+import {COLORS} from '../utils/constance';
 
 interface WelcomeScreenProps {
   onSaveName: (name: string, id: string) => void;
@@ -47,7 +47,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       <TextInput
         style={styles.input}
         placeholder="Enter name"
-        placeholderTextColor={COLOR.placeholder}
+        placeholderTextColor={COLORS.placeholder}
         value={name}
         onChangeText={setName}
       />
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: COLOR.thirdary,
+    borderColor: COLORS.thirdary,
     borderRadius: 3,
     paddingTop: 28,
     paddingBottom: 9,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    backgroundColor: COLOR.thirdary,
+    backgroundColor: COLORS.thirdary,
     paddingHorizontal: 52,
     paddingVertical: 15,
     borderRadius: 50,

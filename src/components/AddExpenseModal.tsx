@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Modal, View, Text, TextInput, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {addExpense} from '../redux/expenses/actions';
-import {Expense} from '../redux/expenses/types';
+import {Expense} from '../redux/types';
 import {AddExpense} from './AddExpense';
 
 interface AddExpenseModalProps {

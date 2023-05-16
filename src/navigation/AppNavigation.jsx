@@ -15,7 +15,7 @@ import HomeScreen from '../components/HomeScreen';
 import ProfileScreen from '../components/ProfileScreen';
 import AddExpense from '../components/AddExpense';
 import plus from '../assets/plusExpense.png';
-import {COLOR} from '../utils/constance';
+import {COLORS} from '../utils/constance';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,7 +41,7 @@ const AppNavigation = ({navigation}) => {
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
-            <Text style={{color: focused ? COLOR.primary : COLOR.secondary}}>
+            <Text style={{color: focused ? COLORS.primary : COLORS.secondary}}>
               Home
             </Text>
           ),
@@ -59,7 +59,7 @@ const AppNavigation = ({navigation}) => {
                   style={{
                     width: 55,
                     height: 55,
-                    backgroundColor: COLOR.primary,
+                    backgroundColor: COLORS.primary,
                     borderRadius: 30,
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -96,7 +96,7 @@ const AppNavigation = ({navigation}) => {
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
-            <Text style={{color: focused ? COLOR.primary : COLOR.secondary}}>
+            <Text style={{color: focused ? COLORS.primary : COLORS.secondary}}>
               Profile
             </Text>
           ),
