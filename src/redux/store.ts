@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import {configureStore} from '@reduxjs/toolkit';
 import userReducer from './userReducer';
 import expensesReducer from './expensesReducer';
 import thunk from 'redux-thunk';

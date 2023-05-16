@@ -1,20 +1,21 @@
-import React, {useState, useLayoutEffect} from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, {useState} from 'react';
 import {
-  Modal,
   Image,
+  Modal,
   Platform,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import 'react-native-gesture-handler';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
+import plus from '../assets/plusExpense.png';
+import AddExpense from '../components/AddExpense';
 import HomeScreen from '../components/HomeScreen';
 import ProfileScreen from '../components/ProfileScreen';
-import AddExpense from '../components/AddExpense';
-import plus from '../assets/plusExpense.png';
 import {COLORS} from '../utils/constance';
 
 const Tab = createBottomTabNavigator();
@@ -41,7 +42,11 @@ const AppNavigation = ({navigation}) => {
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
-            <Text style={{color: focused ? COLORS.primary : COLORS.secondary}}>
+            <Text
+              style={{
+                paddingTop: StatusBar.currentHeight,
+                color: focused ? COLORS.primary : COLORS.secondary,
+              }}>
               Home
             </Text>
           ),

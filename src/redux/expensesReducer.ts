@@ -1,11 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface Expense {
-  id: string;
-  title: string;
-  amount: number;
-  date: Date;
-}
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {Expense} from './types';
 
 interface ExpensesState {
   expenses: Expense[];
@@ -21,13 +15,16 @@ const expensesSlice = createSlice({
   reducers: {
     addExpense: (state, action: PayloadAction<Expense>) => {
       state.expenses.push(action.payload);
+      // state.expenses.sort((a, b) => b.date.getTime() - a.date.getTime());
     },
     deleteExpense: (state, action: PayloadAction<string>) => {
-      state.expenses = state.expenses.filter((expense) => expense.id !== action.payload);
+      state.expenses = state.expenses.filter(
+        expense => expense.id !== action.payload,
+      );
     },
   },
 });
 
-export const { addExpense, deleteExpense } = expensesSlice.actions;
+export const {addExpense, deleteExpense} = expensesSlice.actions;
 
 export default expensesSlice.reducer;

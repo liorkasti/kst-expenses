@@ -33,16 +33,18 @@ const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
         id: Date.now().toString(),
         title,
         amount: parseFloat(amount),
-        date: new Date(date),
+        date: date,
       };
       // Saving the expense to AsyncStorage
       const savedExpenses = await AsyncStorage.getItem('expenses');
       console.log({savedExpenses});
-      let expenses = savedExpenses ? JSON.parse(savedExpenses) : [];
-      expenses.push(newExpense);
-      await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
+      let localExpenses = savedExpenses ? JSON.parse(savedExpenses) : [];
+      localExpenses.push(newExpense);
+      await AsyncStorage.setItem('expenses', JSON.stringify(localExpenses));
+      console.log({localExpenses});
 
       dispatch(addExpense(newExpense));
+
       setTitle('');
       setAmount('');
       setDate('');
@@ -52,11 +54,10 @@ const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
     }
   };
 
-  console.log({expenses});
   return (
     <TouchableOpacity
       activeOpacity={1}
-      style={styles.modalContainer}
+      style={styles.container}
       onPress={onClose}>
       <TouchableOpacity style={styles.modalContent}>
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>

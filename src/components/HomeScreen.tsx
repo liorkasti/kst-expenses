@@ -1,20 +1,21 @@
-import React, {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
   FlatList,
   Image,
-  TouchableOpacity,
   StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
 
-import {deleteExpense} from '../redux/expensesReducer';
-import ExpensesFiltersModal from './ExpensesFiltersModal';
 import closeIcon from '../assets/close.png';
 import filterIcon from '../assets/filter.png';
+import {deleteExpense} from '../redux/expensesReducer';
+import {Expense} from '../redux/types';
 import {COLORS} from '../utils/constance';
+import ExpensesFiltersModal from './ExpensesFiltersModal';
 
 interface Props {}
 
@@ -24,6 +25,18 @@ const HomeScreen: React.FC<Props> = () => {
   const [filteredExpenses, setFilteredExpenses] = useState([] as Expense[]);
 
   const {expenses} = useSelector(state => state.expenses);
+
+  useEffect(() => {
+    filterExpenses();
+    // console.log({expenses, filteredExpenses});
+  }, [expenses, filteredExpenses]);
+
+  const filterExpenses = () => {
+    if (filteredExpenses === '') {
+      setFilteredExpenses(expenses);
+      return;
+    }
+  };
 
   // Function to handle deleting an expense
   const handleDeleteExpense = (expenseId: string) => {
@@ -40,7 +53,7 @@ const HomeScreen: React.FC<Props> = () => {
     }
   };
 
-  // Function to filter expenses based on title or date
+  //TODO: add slice to filter expenses based on title or date
   const handleFilterExpenses = (filter: string, filterValue: string) => {
     let filteredList = expenses;
 
@@ -65,35 +78,37 @@ const HomeScreen: React.FC<Props> = () => {
     setShowFiltersModal(false);
   };
 
-  // Function to clear the applied filters
   const handleClearFilters = () => {
     setFilteredExpenses([]);
     setShowFiltersModal(false);
   };
 
   // Function to render each expense item
-  const renderExpenseItem = ({item}: {item: Expense}) => (
-    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-      <TouchableOpacity onPress={() => handleDeleteExpense(item.id)}>
-        <Image
-          source={closeIcon}
-          style={{width: 20, height: 20, marginRight: 10}}
-        />
-      </TouchableOpacity>
-      <Text>{item.title}</Text>
-    </View>
-  );
+  const renderExpenseItem = ({item}: {item: Expense}) => {
+    return (
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <TouchableOpacity onPress={() => handleDeleteExpense(item.id)}>
+          <Image
+            source={closeIcon}
+            style={{width: 20, height: 20, marginRight: 10}}
+          />
+        </TouchableOpacity>
+        <Text style={styles.paymentTitle}>{item.title}</Text>
+        <Text style={styles.paymentTitle}>{item.amount}</Text>
+        <Text style={styles.paymentTitle}>{item.date}</Text>
+      </View>
+    );
+  };
 
-  // Function to render each section header
+  // TODO: Function to render each section header
   const renderSectionHeader = ({
-    section: {title},
+    section: {item},
   }: {
-    section: {title: string};
-  }) => (
-    <Text style={{fontSize: 18, fontWeight: 'bold', marginTop: 20}}>
-      {title}
-    </Text>
-  );
+    section: {item: string};
+  }) => {
+    console.log('item.date :>> ', item.date.toString());
+    return <Text style={styles.sectionHeader}>{item}</Text>;
+  };
 
   // Function to define the key for each expense item
   const expenseKeyExtractor = (item: Expense) => item.id;
@@ -115,11 +130,18 @@ const HomeScreen: React.FC<Props> = () => {
       </View>
 
       <FlatList
-        data={filteredExpenses.length > 0 ? filteredExpenses : expenses}
+        data={expenses}
+        sections={expenses}
         renderItem={renderExpenseItem}
         keyExtractor={expenseKeyExtractor}
         renderSectionHeader={renderSectionHeader}
       />
+      {/* <SectionList
+        sections={expenses}
+        renderItem={renderExpenseItem}
+        keyExtractor={expenseKeyExtractor}
+        renderSectionHeader={renderSectionHeader}
+      /> */}
 
       {showFiltersModal && (
         <ExpensesFiltersModal
@@ -135,6 +157,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    paddingHorizontal: 16,
   },
   totalTile: {
     paddingLeft: 25,
@@ -165,6 +188,30 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontWeight: '700',
     textAlign: 'center',
+  },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 20,
+  },
+  paymentTitle: {
+    color: '#3E3E3E',
+    fontSize: 16,
+    fontWeight: '400',
+    marginRight: 31.5,
+    marginLeft: 10,
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+  },
+  header: {
+    fontSize: 32,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
   },
 });
 export default HomeScreen;
