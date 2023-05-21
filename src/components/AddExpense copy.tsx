@@ -61,7 +61,7 @@ const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
     <BottomModal
       style={styles.container}
       onPress={onClose}
-      onButtonPress={handleCreate()}>
+      onButtonPress={handleCreate}>
       <Text style={styles.modalTitle}>Create Expense</Text>
       <TextInput
         style={styles.input}

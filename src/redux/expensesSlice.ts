@@ -32,7 +32,8 @@ const expensesSlice = createSlice({
     addExpense: (state, action: PayloadAction<Expense>) => {
       const newExpense = action.payload;
       state.expenses.push(newExpense);
-      state.expenses.sort((a, b) => b.date.getTime() - a.date.getTime());
+      state.expenses.sort((a, b) => b.date - a.date);
+      // state.expenses.sort((a, b) => b.date.getTime() - a.date.getTime());
     },
     deleteExpense: (state, action: PayloadAction<string>) => {
       const expenseId = action.payload;

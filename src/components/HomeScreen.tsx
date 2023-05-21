@@ -25,11 +25,12 @@ import ExpensesFiltersModal from './ExpensesFiltersModal';
 interface Props {}
 
 const HomeScreen = () => {
+  const [filteredExpenses, setFilteredExpenses] = useState([] as Expense[]);
   const [isFiltersModalVisible, setFiltersModalVisible] = useState(false);
 
   const dispatch = useDispatch();
   const {expenses, filters} = useSelector(state => state.expenses);
-  console.log('filters :>> ', filters);
+  console.log('filters :>> ', filteredExpenses);
 
   // Function to handle deleting an expense
   const handleDeleteExpense = (expenseId: string) => {
@@ -53,9 +54,7 @@ const HomeScreen = () => {
   };
 
   const handleFilterExpenses = () => {
-    // Dispatch the actions to set the filter values
-    dispatch(setFilterTitle(filters.title));
-    dispatch(setFilterDate(filters.date));
+    console.log({filteredExpenses});
   };
 
   // Render each expense section based on the filtered expenses
@@ -206,6 +205,8 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     fontSize: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 4,
     backgroundColor: '#F4EEEE',
     fontWeight: '400',
   },

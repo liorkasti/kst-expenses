@@ -24,7 +24,7 @@ interface AddExpenseModalProps {
 const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(new Date());
 
   const dispatch = useDispatch();
   const {expenses} = useSelector(state => state.expenses);
@@ -39,7 +39,7 @@ const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
       };
       // Saving the expense to AsyncStorage
       const savedExpenses = await AsyncStorage.getItem('expenses');
-      // console.log({savedExpenses});
+      console.log({newExpense});
       let localExpenses = savedExpenses ? JSON.parse(savedExpenses) : [];
       localExpenses.push(newExpense);
       await AsyncStorage.setItem('expenses', JSON.stringify(localExpenses));

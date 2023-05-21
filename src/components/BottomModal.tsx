@@ -1,25 +1,19 @@
 import React from 'react';
-import {
-  Image,
-  KeyboardAvoidingView,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {Image, StatusBar, StyleSheet, TouchableOpacity} from 'react-native';
 
 import close from '../assets/close.png';
 import Button from './Button';
 
 type BottomModalProps = {
-  onButtonPress: () => void;
+  onButtonPress?: () => void;
   onClose: () => void;
-  children: any;
+  children?: any;
 };
 
 const BottomModal: React.FC<BottomModalProps> = ({
   children,
   onClose,
-  onButtonPress,
+  // onButtonPress,
 }) => {
   return (
     <TouchableOpacity
@@ -36,10 +30,8 @@ const BottomModal: React.FC<BottomModalProps> = ({
             }}
           />
         </TouchableOpacity>
-        {/* <KeyboardAvoidingView behavior="padding"> */}
         {children}
-        {/* </KeyboardAvoidingView> */}
-        <Button onPress={onButtonPress} text="Create" />
+        {/* <Button onPress={onButtonPress} text="Create" /> */}
       </TouchableOpacity>
     </TouchableOpacity>
   );
