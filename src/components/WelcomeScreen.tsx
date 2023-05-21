@@ -11,6 +11,7 @@ import {useDispatch} from 'react-redux';
 
 import {storeUser} from '../redux/userReducer';
 import {COLORS} from '../utils/constance';
+import Button from './Button';
 
 interface WelcomeScreenProps {
   onSaveName: (name: string, id: string) => void;
@@ -50,9 +51,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         value={name}
         onChangeText={setName}
       />
-      <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+      <Button onButtonPress={handleLoginPress} text="Login" />
     </View>
   );
 };
@@ -78,19 +77,6 @@ const styles = StyleSheet.create({
     width: '80%',
     textAlign: 'left',
     fontSize: 16,
-  },
-  button: {
-    position: 'absolute',
-    backgroundColor: COLORS.thirdary,
-    paddingHorizontal: 52,
-    paddingVertical: 15,
-    borderRadius: 50,
-    bottom: 61,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '700',
   },
 });
 

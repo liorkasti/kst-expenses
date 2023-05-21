@@ -97,6 +97,9 @@ const HomeScreen = () => {
       <SectionList
         sections={expenseSections}
         keyExtractor={(item, index) => item.id + index}
+        ItemSeparatorComponent={() => (
+          <View style={{borderBottomWidth: 0.25}} />
+        )}
         renderItem={({item}) => (
           <View
             style={{
@@ -104,8 +107,7 @@ const HomeScreen = () => {
               alignItems: 'center',
               justifyContent: 'space-between',
               paddingHorizontal: 16,
-              borderBottomColor: '#000000',
-              borderBottomWidth: 0.25,
+              height: 62,
             }}>
             <TouchableOpacity onPress={() => handleDeleteExpense(item.id)}>
               <Image

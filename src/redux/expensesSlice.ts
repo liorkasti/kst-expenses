@@ -12,11 +12,11 @@ interface ExpensesState {
 
 const initialState: ExpensesState = {
   expenses: [
+    {amount: 33, date: '03/03/2023', id: '1684244219974', title: 'Test'},
+    {amount: 33, date: '03/03/2023', id: '1684244219975', title: 'Test'},
     {amount: 33, date: '03/03/2023', id: '1684244219976', title: 'Test'},
-    {amount: 33, date: '03/03/2023', id: '1684244219976', title: 'Test'},
-    {amount: 33, date: '03/03/2023', id: '1684244219976', title: 'Test'},
-    {amount: 123, date: '1-1-2023', id: '1684244779913', title: 'Qwe'},
-    {amount: 123, date: '1-1-2023', id: '1684244779913', title: 'Qwe'},
+    {amount: 123, date: '1-1-2023', id: '1684244779911', title: 'Qwe'},
+    {amount: 123, date: '1-1-2023', id: '1684244779912', title: 'Qwe'},
     {amount: 123, date: '1-1-2023', id: '1684244779913', title: 'Qwe'},
   ],
   filters: {

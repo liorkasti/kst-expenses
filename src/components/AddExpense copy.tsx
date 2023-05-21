@@ -13,8 +13,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Expense} from '../redux/types';
 import {addExpense} from '../redux/expensesSlice';
 import {COLORS} from '../utils/constance';
-import close from '../assets/close.png';
 import Button from './Button';
+import BottomModal from './BottomModal';
 
 interface AddExpenseModalProps {
   visible: boolean;
@@ -31,6 +31,7 @@ const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
 
   const handleCreate = async () => {
     try {
+      console.log('object :>> ');
       const newExpense: Expense = {
         id: Date.now().toString(),
         title,
@@ -57,46 +58,34 @@ const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={1}
+    <BottomModal
       style={styles.container}
-      onPress={onClose}>
-      <TouchableOpacity style={styles.modalContent}>
-        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <Image
-            source={close}
-            style={{
-              width: 13.5,
-              height: 13.5,
-            }}
-          />
-        </TouchableOpacity>
-        <Text style={styles.modalTitle}>Create Expense</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Title"
-          placeholderTextColor={COLORS.placeholder}
-          value={title}
-          onChangeText={setTitle}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Amount"
-          placeholderTextColor={COLORS.placeholder}
-          value={amount}
-          onChangeText={setAmount}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Date"
-          placeholderTextColor={COLORS.placeholder}
-          value={date}
-          onChangeText={setDate}
-        />
-        <Button onButtonPress={handleCreate} text="Create" />
-      </TouchableOpacity>
-    </TouchableOpacity>
+      onPress={onClose}
+      onButtonPress={handleCreate()}>
+      <Text style={styles.modalTitle}>Create Expense</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Title"
+        placeholderTextColor={COLORS.placeholder}
+        value={title}
+        onChangeText={setTitle}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Amount"
+        placeholderTextColor={COLORS.placeholder}
+        value={amount}
+        onChangeText={setAmount}
+        keyboardType="numeric"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Date"
+        placeholderTextColor={COLORS.placeholder}
+        value={date}
+        onChangeText={setDate}
+      />
+    </BottomModal>
   );
 };
 
