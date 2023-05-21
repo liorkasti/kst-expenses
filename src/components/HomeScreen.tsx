@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
+  SectionList,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,31 +13,23 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import closeIcon from '../assets/close.png';
 import filterIcon from '../assets/filter.png';
-import {deleteExpense} from '../redux/expensesReducer';
+import {
+  setFilterTitle,
+  setFilterDate,
+  deleteExpense,
+} from '../redux/expensesReducer';
 import {Expense} from '../redux/types';
 import {COLORS} from '../utils/constance';
 import ExpensesFiltersModal from './ExpensesFiltersModal';
 
 interface Props {}
 
-const HomeScreen: React.FC<Props> = () => {
+const HomeScreen = () => {
+  const [isFiltersModalVisible, setFiltersModalVisible] = useState(false);
+
   const dispatch = useDispatch();
-  const [showFiltersModal, setShowFiltersModal] = useState(false);
-  const [filteredExpenses, setFilteredExpenses] = useState([] as Expense[]);
-
-  const {expenses} = useSelector(state => state.expenses);
-
-  useEffect(() => {
-    filterExpenses();
-    // console.log({expenses, filteredExpenses});
-  }, [expenses, filteredExpenses]);
-
-  const filterExpenses = () => {
-    if (filteredExpenses === '') {
-      setFilteredExpenses(expenses);
-      return;
-    }
-  };
+  const {expenses, filters} = useSelector(state => state.expenses);
+  console.log('filters :>> ', filters);
 
   // Function to handle deleting an expense
   const handleDeleteExpense = (expenseId: string) => {
@@ -53,65 +46,72 @@ const HomeScreen: React.FC<Props> = () => {
     }
   };
 
-  //TODO: add slice to filter expenses based on title or date
-  const handleFilterExpenses = (filter: string, filterValue: string) => {
-    let filteredList = expenses;
-
-    if (filter === 'title') {
-      filteredList = filteredList.filter(expense =>
-        expense.title.toLowerCase().includes(filterValue.toLowerCase()),
-      );
-    } else if (filter === 'date') {
-      filteredList = filteredList.filter(expense => {
-        const expenseDate = new Date(expense.date);
-        const filterDate = new Date(filterValue);
-
-        return (
-          expenseDate.getFullYear() === filterDate.getFullYear() &&
-          expenseDate.getMonth() === filterDate.getMonth() &&
-          expenseDate.getDate() === filterDate.getDate()
-        );
-      });
-    }
-
-    setFilteredExpenses(filteredList);
-    setShowFiltersModal(false);
-  };
-
   const handleClearFilters = () => {
     setFilteredExpenses([]);
     setShowFiltersModal(false);
   };
 
-  // Function to render each expense item
-  const renderExpenseItem = ({item}: {item: Expense}) => {
+  const handleFilterExpenses = () => {
+    // Dispatch the actions to set the filter values
+    dispatch(setFilterTitle(filters.title));
+    dispatch(setFilterDate(filters.date));
+  };
+
+  // Render each expense section based on the filtered expenses
+  const renderExpenseSections = () => {
+    // Apply filters to the expenses based on the filter values
+    let filteredExpenses = expenses;
+    if (filters.title) {
+      filteredExpenses = filteredExpenses.filter(expense =>
+        expense.title.toLowerCase().includes(filters.title.toLowerCase()),
+      );
+    }
+    if (filters.date) {
+      filteredExpenses = filteredExpenses.filter(
+        expense =>
+          expense.date.getFullYear() === filters.date!.getFullYear() &&
+          expense.date.getMonth() === filters.date!.getMonth() &&
+          expense.date.getDate() === filters.date!.getDate(),
+      );
+    }
+
+    // Group the expenses by date
+    const expenseSections = [];
+    let currentSection: {title: string; data: Expense[]} | null = null;
+
+    filteredExpenses.forEach(expense => {
+      const expenseDate = expense.date;
+      // const expenseDate = expense.date.toDateString();
+      if (!currentSection || currentSection.title !== expenseDate) {
+        // Create a new section
+        currentSection = {title: expenseDate, data: [expense]};
+        expenseSections.push(currentSection);
+      } else {
+        // Add the expense to the current section
+        currentSection.data.push(expense);
+      }
+    });
+
     return (
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <TouchableOpacity onPress={() => handleDeleteExpense(item.id)}>
-          <Image
-            source={closeIcon}
-            style={{width: 20, height: 20, marginRight: 10}}
-          />
-        </TouchableOpacity>
-        <Text style={styles.paymentTitle}>{item.title}</Text>
-        <Text style={styles.paymentTitle}>{item.amount}</Text>
-        <Text style={styles.paymentTitle}>{item.date}</Text>
-      </View>
+      <SectionList
+        sections={expenseSections}
+        keyExtractor={(item, index) => item.id + index}
+        renderItem={({item}) => (
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity onPress={() => handleDeleteExpense(item.id)}>
+              <Image
+                source={closeIcon}
+                style={{width: 20, height: 20, marginRight: 10}}
+              />
+            </TouchableOpacity>
+            <Text style={styles.paymentTitle}>{item.title}</Text>
+            <Text style={styles.paymentTitle}>{item.amount}</Text>
+          </View>
+        )}
+        renderSectionHeader={({section: {title}}) => <Text>{title}</Text>}
+      />
     );
   };
-
-  // TODO: Function to render each section header
-  const renderSectionHeader = ({
-    section: {item},
-  }: {
-    section: {item: string};
-  }) => {
-    console.log('item.date :>> ', item.date.toString());
-    return <Text style={styles.sectionHeader}>{item}</Text>;
-  };
-
-  // Function to define the key for each expense item
-  const expenseKeyExtractor = (item: Expense) => item.id;
 
   return (
     <View style={styles.container}>
@@ -123,32 +123,20 @@ const HomeScreen: React.FC<Props> = () => {
       <View style={styles.filterWrapper}>
         <TouchableOpacity
           style={styles.filterButton}
-          onPress={() => setShowFiltersModal(true)}>
+          onPress={() => setFiltersModalVisible(!isFiltersModalVisible)}>
           <Image source={filterIcon} style={styles.containerIcon} />
           <Text style={styles.leftText}>Filter</Text>
         </TouchableOpacity>
       </View>
 
-      <FlatList
-        data={expenses}
-        sections={expenses}
-        renderItem={renderExpenseItem}
-        keyExtractor={expenseKeyExtractor}
-        renderSectionHeader={renderSectionHeader}
-      />
-      {/* <SectionList
-        sections={expenses}
-        renderItem={renderExpenseItem}
-        keyExtractor={expenseKeyExtractor}
-        renderSectionHeader={renderSectionHeader}
-      /> */}
-
-      {showFiltersModal && (
+      {isFiltersModalVisible && (
         <ExpensesFiltersModal
           onFilter={handleFilterExpenses}
           onClearFilters={handleClearFilters}
         />
       )}
+
+      {renderExpenseSections()}
     </View>
   );
 };
@@ -214,4 +202,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
 });
+
 export default HomeScreen;

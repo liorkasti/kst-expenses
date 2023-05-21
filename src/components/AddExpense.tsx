@@ -37,11 +37,11 @@ const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
       };
       // Saving the expense to AsyncStorage
       const savedExpenses = await AsyncStorage.getItem('expenses');
-      console.log({savedExpenses});
+      // console.log({savedExpenses});
       let localExpenses = savedExpenses ? JSON.parse(savedExpenses) : [];
       localExpenses.push(newExpense);
       await AsyncStorage.setItem('expenses', JSON.stringify(localExpenses));
-      console.log({localExpenses});
+      // console.log({localExpenses});
 
       dispatch(addExpense(newExpense));
 

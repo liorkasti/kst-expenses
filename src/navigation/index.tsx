@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 
 import WelcomeScreen from '../components/WelcomeScreen';
 import AppNavigation from './AppNavigation';
+import {StatusBar} from 'react-native';
 
 const RootStack = createNativeStackNavigator();
 

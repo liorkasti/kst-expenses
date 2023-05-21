@@ -4,7 +4,6 @@ import {
   Image,
   Modal,
   Platform,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -42,11 +41,7 @@ const AppNavigation = ({navigation}) => {
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
-            <Text
-              style={{
-                paddingTop: StatusBar.currentHeight,
-                color: focused ? COLORS.primary : COLORS.secondary,
-              }}>
+            <Text style={{color: focused ? COLORS.primary : COLORS.secondary}}>
               Home
             </Text>
           ),
