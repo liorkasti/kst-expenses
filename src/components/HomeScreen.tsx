@@ -17,7 +17,7 @@ import {
   setFilterTitle,
   setFilterDate,
   deleteExpense,
-} from '../redux/expensesReducer';
+} from '../redux/expensesSlice';
 import {Expense} from '../redux/types';
 import {COLORS} from '../utils/constance';
 import ExpensesFiltersModal from './ExpensesFiltersModal';
@@ -47,8 +47,9 @@ const HomeScreen = () => {
   };
 
   const handleClearFilters = () => {
-    setFilteredExpenses([]);
-    setShowFiltersModal(false);
+    dispatch(setFilterTitle(''));
+    dispatch(setFilterDate(null));
+    setFiltersModalVisible(false);
   };
 
   const handleFilterExpenses = () => {
@@ -97,7 +98,15 @@ const HomeScreen = () => {
         sections={expenseSections}
         keyExtractor={(item, index) => item.id + index}
         renderItem={({item}) => (
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingHorizontal: 16,
+              borderBottomColor: '#000000',
+              borderBottomWidth: 0.25,
+            }}>
             <TouchableOpacity onPress={() => handleDeleteExpense(item.id)}>
               <Image
                 source={closeIcon}
@@ -108,26 +117,32 @@ const HomeScreen = () => {
             <Text style={styles.paymentTitle}>{item.amount}</Text>
           </View>
         )}
-        renderSectionHeader={({section: {title}}) => <Text>{title}</Text>}
+        renderSectionHeader={({section: {title}}) => (
+          <Text style={styles.sectionHeader}>{title}</Text>
+        )}
       />
     );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.totalTile}>
-        Total Expenses:{' '}
-        {expenses.reduce((total, expense) => total + expense.amount, 0)}
-      </Text>
+      <View style={styles.topWrapper}>
+        <Text style={styles.totalTile}>
+          Total Expenses:{' '}
+          {expenses.reduce((total, expense) => total + expense.amount, 0)}
+        </Text>
 
-      <View style={styles.filterWrapper}>
-        <TouchableOpacity
-          style={styles.filterButton}
-          onPress={() => setFiltersModalVisible(!isFiltersModalVisible)}>
-          <Image source={filterIcon} style={styles.containerIcon} />
-          <Text style={styles.leftText}>Filter</Text>
-        </TouchableOpacity>
+        <View style={styles.filterWrapper}>
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setFiltersModalVisible(!isFiltersModalVisible)}>
+            <Image source={filterIcon} style={styles.containerIcon} />
+            <Text style={styles.leftText}>Filter</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
+      {renderExpenseSections()}
 
       {isFiltersModalVisible && (
         <ExpensesFiltersModal
@@ -135,8 +150,6 @@ const HomeScreen = () => {
           onClearFilters={handleClearFilters}
         />
       )}
-
-      {renderExpenseSections()}
     </View>
   );
 };
@@ -145,8 +158,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 16,
   },
+  topWrapper: {paddingHorizontal: 16},
   totalTile: {
     paddingLeft: 25,
     paddingRight: 3,
@@ -177,11 +190,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
   },
-  sectionHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 20,
-  },
   paymentTitle: {
     color: '#3E3E3E',
     fontSize: 16,
@@ -194,9 +202,10 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
   },
-  header: {
-    fontSize: 32,
-    backgroundColor: '#fff',
+  sectionHeader: {
+    fontSize: 14,
+    backgroundColor: '#F4EEEE',
+    fontWeight: '400',
   },
   title: {
     fontSize: 24,

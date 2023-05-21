@@ -28,11 +28,11 @@ const ExpensesFiltersModal: React.FC<Props> = ({onFilter, onClearFilters}) => {
       />
 
       <TouchableOpacity onPress={() => onFilter('title', titleFilter)}>
-        <Text>Filter</Text>
+        <Text>Filter title</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => onFilter('date', dateFilter)}>
-        <Text>Filter</Text>
+        <Text>Filter date</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={onClearFilters}>

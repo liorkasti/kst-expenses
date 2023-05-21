@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {RootState} from './store';
 import {Expense} from './types';
 
 interface ExpensesState {
@@ -51,6 +52,27 @@ const expensesSlice = createSlice({
     },
   },
 });
+
+export const selectFilteredExpenses = (state: RootState) => {
+  const {title, date} = state.expenses.filters;
+  return state.expenses.expenses.filter(expense => {
+    let isTitleMatch = true;
+    let isDateMatch = true;
+
+    if (title) {
+      isTitleMatch = expense.title.toLowerCase().includes(title.toLowerCase());
+    }
+
+    if (date) {
+      isDateMatch =
+        expense.date.getFullYear() === date.getFullYear() &&
+        expense.date.getMonth() === date.getMonth() &&
+        expense.date.getDate() === date.getDate();
+    }
+
+    return isTitleMatch && isDateMatch;
+  });
+};
 
 export const {
   addExpense,

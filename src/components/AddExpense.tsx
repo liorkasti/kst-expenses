@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {Expense} from '../redux/types';
-import {addExpense} from '../redux/expensesReducer';
+import {addExpense} from '../redux/expensesSlice';
 import {COLORS} from '../utils/constance';
 import close from '../assets/close.png';
 

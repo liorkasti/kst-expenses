@@ -13,7 +13,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import closeIcon from '../assets/close.png';
 import filterIcon from '../assets/filter.png';
-import {deleteExpense} from '../redux/expensesReducer';
+import {deleteExpense} from '../redux/expensesSlice';
 import {Expense} from '../redux/types';
 import {COLORS} from '../utils/constance';
 import ExpensesFiltersModal from './ExpensesFiltersModal';
