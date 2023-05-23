@@ -1,40 +1,24 @@
 import React from 'react';
-import {
-  Image,
-  Modal,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {Image, StatusBar, StyleSheet, TouchableOpacity} from 'react-native';
 
 import close from '../assets/close.png';
 import Button from './Button';
 
 type BottomModalProps = {
-  visible?: boolean;
+  onButtonPress?: () => void;
   onClose: () => void;
   children?: any;
-  size: number;
 };
 
 const BottomModal: React.FC<BottomModalProps> = ({
   children,
   onClose,
-  visible,
-  modalsize,
-}) => (
-  <Modal
-    visible={visible}
-    onRequestClose={onClose}
-    animationType="slide"
-    transparent={true}
-    statusBarTranslucent={true}>
+  // onButtonPress,
+}) => {
+  return (
     <TouchableOpacity
       activeOpacity={1}
-      style={[
-        styles.container,
-        {paddingTop: modalsize + StatusBar.currentHeight},
-      ]}
+      style={styles.container}
       onPress={onClose}>
       <TouchableOpacity style={styles.modalContent}>
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
@@ -50,15 +34,15 @@ const BottomModal: React.FC<BottomModalProps> = ({
         {/* <Button onPress={onButtonPress} text="Create" /> */}
       </TouchableOpacity>
     </TouchableOpacity>
-  </Modal>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
-
+    paddingTop: 60 + StatusBar.currentHeight,
     height: '100%',
     width: '100%',
   },

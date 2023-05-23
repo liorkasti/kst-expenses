@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {RootState} from './store';
-import {Expense, Filters} from './types';
+import {RootState} from '../store';
+import {Expense, Filters} from '../types';
 
 interface ExpensesState {
   expenses: Expense[];

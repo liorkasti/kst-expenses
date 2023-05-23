@@ -17,12 +17,11 @@ import {
   setFilterTitle,
   setFilterDate,
   deleteExpense,
-} from '../redux/expensesSlice';
+} from '../redux/slices/expenses-slice';
 import {Expense, ExpenseSection} from '../redux/types';
 import {COLORS} from '../utils/constance';
 import ExpensesFiltersModal from './ExpensesFiltersModal';
-
-interface Props {}
+import BottomModal from './BottomModal';
 
 const HomeScreen = () => {
   const filteredExpensesRef = useRef([] as Expense[]);
@@ -56,7 +55,6 @@ const HomeScreen = () => {
   const handleFilteredExpenses = () => {
     // Apply filters to the expenses based on the filter values
     let filteredExpenses = expenses;
-    console.log({filters});
 
     if (filters.title) {
       filteredExpenses = filteredExpenses.filter((expense: Expense) =>
@@ -128,32 +126,35 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topWrapper}>
-        <Text style={styles.totalTile}>
-          Total Expenses:{' '}
-          {expenses.reduce((total, expense) => total + expense.amount, 0)}
-        </Text>
+    <>
+      <View style={styles.container}>
+        <View style={styles.topWrapper}>
+          <Text style={styles.totalTile}>
+            Total Expenses:{' '}
+            {expenses.reduce((total, expense) => total + expense.amount, 0)}
+          </Text>
 
-        <View style={styles.filterWrapper}>
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => setFiltersModalVisible(!isFiltersModalVisible)}>
-            <Image source={filterIcon} style={styles.containerIcon} />
-            <Text style={styles.leftText}>Filter</Text>
-          </TouchableOpacity>
+          <View style={styles.filterWrapper}>
+            <TouchableOpacity
+              style={styles.filterButton}
+              onPress={() => setFiltersModalVisible(!isFiltersModalVisible)}>
+              <Image source={filterIcon} style={styles.containerIcon} />
+              <Text style={styles.leftText}>Filter</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+
+        {renderExpenseSections()}
       </View>
-
-      {renderExpenseSections()}
-
       {isFiltersModalVisible && (
-        <ExpensesFiltersModal
-          // onFilter={handleFilterExpenses}
-          onClearFilters={handleClearFilters}
-        />
+        <BottomModal
+          visible={isFiltersModalVisible}
+          onClose={() => setFiltersModalVisible(!isFiltersModalVisible)}
+          modalsize={460}>
+          <ExpensesFiltersModal onClearFilters={handleClearFilters} />
+        </BottomModal>
       )}
-    </View>
+    </>
   );
 };
 

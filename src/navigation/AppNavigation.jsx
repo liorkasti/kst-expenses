@@ -15,6 +15,7 @@ import plus from '../assets/plusExpense.png';
 import AddExpense from '../components/AddExpense';
 import HomeScreen from '../components/HomeScreen';
 import ProfileScreen from '../components/ProfileScreen';
+import BottomModal from '../components/BottomModal';
 import {COLORS} from '../utils/constance';
 
 const Tab = createBottomTabNavigator();
@@ -76,15 +77,12 @@ const AppNavigation = ({navigation}) => {
                 </View>
               </TouchableOpacity>
 
-              <Modal
+              <BottomModal
                 visible={isModalOpen}
-                onRequestClose={handleCloseModal}
-                animationType="slide"
-                transparent={true}
-                style={{}}
-                statusBarTranslucent={true}>
+                onClose={() => setIsModalOpen(!isModalOpen)}
+                modalsize={60}>
                 <AddExpense onClose={handleCloseModal} />
-              </Modal>
+              </BottomModal>
             </View>
           ),
         }}

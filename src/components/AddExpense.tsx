@@ -11,7 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {Expense} from '../redux/types';
-import {addExpense} from '../redux/expensesSlice';
+import {addExpense} from '../redux/slices/expenses-slice';
 import {COLORS} from '../utils/constance';
 import close from '../assets/close.png';
 import Button from './Button';
@@ -24,111 +24,69 @@ interface AddExpenseModalProps {
 const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(null);
 
   const dispatch = useDispatch();
   const {expenses} = useSelector(state => state.expenses);
 
   const handleCreate = async () => {
     try {
-      const newExpense: Expense = {
-        id: Date.now().toString(),
-        title,
-        amount: parseFloat(amount),
-        date: date,
-      };
-      // Saving the expense to AsyncStorage
-      const savedExpenses = await AsyncStorage.getItem('expenses');
-      console.log({newExpense});
-      let localExpenses = savedExpenses ? JSON.parse(savedExpenses) : [];
-      localExpenses.push(newExpense);
-      await AsyncStorage.setItem('expenses', JSON.stringify(localExpenses));
-      // console.log({localExpenses});
+      if (title && amount && date) {
+        const newExpense: Expense = {
+          id: Date.now().toString(),
+          title,
+          amount: parseFloat(amount),
+          date: date,
+        };
+        // Saving the expense to AsyncStorage
+        const savedExpenses = await AsyncStorage.getItem('expenses');
+        let localExpenses = savedExpenses ? JSON.parse(savedExpenses) : [];
+        localExpenses.push(newExpense);
+        await AsyncStorage.setItem('expenses', JSON.stringify(localExpenses));
 
-      dispatch(addExpense(newExpense));
+        dispatch(addExpense(newExpense));
 
-      setTitle('');
-      setAmount('');
-      setDate('');
-      onClose();
+        setTitle('');
+        setAmount('');
+        setDate(null);
+        onClose();
+      }
     } catch (error) {
       console.log('Error saving expense:', error);
     }
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={1}
-      style={styles.container}
-      onPress={onClose}>
-      <TouchableOpacity style={styles.modalContent}>
-        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <Image
-            source={close}
-            style={{
-              width: 13.5,
-              height: 13.5,
-            }}
-          />
-        </TouchableOpacity>
-        <Text style={styles.modalTitle}>Create Expense</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Title"
-          placeholderTextColor={COLORS.placeholder}
-          value={title}
-          onChangeText={setTitle}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Amount"
-          placeholderTextColor={COLORS.placeholder}
-          value={amount}
-          onChangeText={setAmount}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Date"
-          placeholderTextColor={COLORS.placeholder}
-          value={date}
-          onChangeText={setDate}
-        />
-        <Button onButtonPress={handleCreate} text="Create" />
-      </TouchableOpacity>
-    </TouchableOpacity>
+    <>
+      <Text style={styles.modalTitle}>Create Expense</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Title"
+        placeholderTextColor={COLORS.placeholder}
+        value={title}
+        onChangeText={setTitle}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Amount"
+        placeholderTextColor={COLORS.placeholder}
+        value={amount}
+        onChangeText={setAmount}
+        keyboardType="numeric"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Date"
+        placeholderTextColor={COLORS.placeholder}
+        value={date}
+        onChangeText={setDate}
+      />
+      <Button onButtonPress={handleCreate} text="Create" />
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    paddingTop: 60 + StatusBar.currentHeight,
-    height: '100%',
-    width: '100%',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    borderRadius: 22,
-    paddingHorizontal: 32,
-    paddingTop: 50,
-    paddingBottom: 20,
-    borderWidth: 1,
-    borderColor: '#A6A6A6',
-    height: '100%',
-    width: '100%',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 23.25,
-    right: 25.25,
-  },
-  closeButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
   modalTitle: {
     fontSize: 18,
     fontWeight: '400',

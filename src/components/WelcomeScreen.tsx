@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 
-import {storeUser} from '../redux/userReducer';
+import {storeUser} from '../redux/slices/user-slice';
 import {COLORS} from '../utils/constance';
 import Button from './Button';
 
