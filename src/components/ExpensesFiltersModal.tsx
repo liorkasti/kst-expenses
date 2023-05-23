@@ -1,26 +1,26 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {View, Text, TextInput, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 import Button from './Button';
 import {setFilterDate, setFilterTitle} from '../redux/expensesSlice';
 
 interface Props {
-  onFilter: () => void;
+  // onFilter: () => void;
   onClearFilters: () => void;
 }
 
-const ExpensesFiltersModal: React.FC<Props> = ({onFilter, onClearFilters}) => {
+const ExpensesFiltersModal: React.FC<Props> = ({onClearFilters}) => {
   // State variables to store the filter values
   const [titleFilter, setTitleFilter] = useState('');
-  const [dateFilter, setDateFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState(null);
 
   const dispatch = useDispatch();
 
-  console.log({titleFilter, dateFilter});
-  useCallback(() => {
+  const handleFilterExpenses = () => {
+    console.log({titleFilter, dateFilter});
     dispatch(setFilterTitle(titleFilter));
     dispatch(setFilterDate(dateFilter));
-  }, [dateFilter, dispatch, titleFilter]);
+  };
 
   return (
     <View>
@@ -38,7 +38,7 @@ const ExpensesFiltersModal: React.FC<Props> = ({onFilter, onClearFilters}) => {
         placeholder="Enter date"
       />
 
-      <Button text={'Filter'} onButtonPress={onFilter} />
+      <Button text={'Filter'} onButtonPress={handleFilterExpenses} />
 
       <TouchableOpacity onPress={onClearFilters}>
         <Text>Clear Filters</Text>

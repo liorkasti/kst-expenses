@@ -11,6 +11,15 @@ export interface Expense {
 export interface ExpenseState {
   expenses: Expense[];
 }
+export interface ExpenseSection {
+  title: string;
+  data: Expense[];
+}
+
+export interface Filters {
+  title: string;
+  date: Date | null;
+}
 
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const DELETE_EXPENSE = 'DELETE_EXPENSE';

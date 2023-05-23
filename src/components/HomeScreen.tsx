@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -18,19 +18,19 @@ import {
   setFilterDate,
   deleteExpense,
 } from '../redux/expensesSlice';
-import {Expense} from '../redux/types';
+import {Expense, ExpenseSection} from '../redux/types';
 import {COLORS} from '../utils/constance';
 import ExpensesFiltersModal from './ExpensesFiltersModal';
 
 interface Props {}
 
 const HomeScreen = () => {
-  const [filteredExpenses, setFilteredExpenses] = useState([] as Expense[]);
+  const filteredExpensesRef = useRef([] as Expense[]);
+  const expenseSectionsRef = useRef([] as ExpenseSection);
   const [isFiltersModalVisible, setFiltersModalVisible] = useState(false);
 
   const dispatch = useDispatch();
   const {expenses, filters} = useSelector(state => state.expenses);
-  console.log('filters :>> ', filteredExpenses);
 
   // Function to handle deleting an expense
   const handleDeleteExpense = (expenseId: string) => {
@@ -53,33 +53,35 @@ const HomeScreen = () => {
     setFiltersModalVisible(false);
   };
 
-  const handleFilterExpenses = () => {
-    console.log({filteredExpenses});
-  };
-
-  // Render each expense section based on the filtered expenses
-  const renderExpenseSections = () => {
+  const handleFilteredExpenses = () => {
     // Apply filters to the expenses based on the filter values
     let filteredExpenses = expenses;
+    console.log({filters});
+
     if (filters.title) {
-      filteredExpenses = filteredExpenses.filter(expense =>
+      filteredExpenses = filteredExpenses.filter((expense: Expense) =>
         expense.title.toLowerCase().includes(filters.title.toLowerCase()),
       );
     }
     if (filters.date) {
       filteredExpenses = filteredExpenses.filter(
-        expense =>
+        (expense: Expense) =>
           expense.date.getFullYear() === filters.date!.getFullYear() &&
           expense.date.getMonth() === filters.date!.getMonth() &&
           expense.date.getDate() === filters.date!.getDate(),
       );
     }
+    filteredExpensesRef.current = filteredExpenses;
+  };
 
+  // Render each expense section based on the filtered expenses
+  const renderExpenseSections = () => {
+    handleFilteredExpenses();
     // Group the expenses by date
-    const expenseSections = [];
+    const expenseSections = [] as unknown as ExpenseSection;
     let currentSection: {title: string; data: Expense[]} | null = null;
 
-    filteredExpenses.forEach(expense => {
+    filteredExpensesRef.current.forEach(expense => {
       const expenseDate = expense.date;
       // const expenseDate = expense.date.toDateString();
       if (!currentSection || currentSection.title !== expenseDate) {
@@ -147,7 +149,7 @@ const HomeScreen = () => {
 
       {isFiltersModalVisible && (
         <ExpensesFiltersModal
-          onFilter={handleFilterExpenses}
+          // onFilter={handleFilterExpenses}
           onClearFilters={handleClearFilters}
         />
       )}

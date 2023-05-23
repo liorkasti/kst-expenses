@@ -1,13 +1,10 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState} from './store';
-import {Expense} from './types';
+import {Expense, Filters} from './types';
 
 interface ExpensesState {
   expenses: Expense[];
-  filters: {
-    title: string;
-    date: Date | null;
-  };
+  filters: Filters[];
 }
 
 const initialState: ExpensesState = {
