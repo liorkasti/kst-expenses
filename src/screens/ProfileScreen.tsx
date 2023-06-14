@@ -7,6 +7,9 @@ import {
   NavigationContainerProps,
   useNavigation,
 } from '@react-navigation/native';
+import {signOutStr, totalExpensesStr} from '../constants';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {COLORS} from '../utils/constance';
 
 type Props = {
   navigation: NavigationContainerProps;
@@ -25,11 +28,9 @@ const ProfileScreen = ({}) => {
   return (
     <View style={styles.container}>
       <View style={styles.totalLine}>
-        <Text style={styles.text}>
-          Total Expenses:{' '}
-          <Text style={styles.total}>
-            {expenses.reduce((total, expense) => total + expense.amount, 0)}
-          </Text>
+        <Text style={styles.text}>{totalExpensesStr}</Text>
+        <Text style={styles.total}>
+          {expenses.reduce((total, expense) => total + expense.amount, 0)}
         </Text>
       </View>
       <View
@@ -40,7 +41,7 @@ const ProfileScreen = ({}) => {
         }}
       />
       <TouchableOpacity onPress={handleSignout}>
-        <Text style={styles.text}>Sign Out</Text>
+        <Text style={styles.text}>{signOutStr}</Text>
       </TouchableOpacity>
 
       <View
@@ -58,7 +59,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
+    backgroundColor: COLORS.bkg,
   },
   totalLine: {
     flexDirection: 'row',
@@ -68,11 +70,13 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     fontWeight: '400',
     fontSize: 17,
+    color: COLORS.title,
   },
   total: {
     paddingVertical: 30,
     fontWeight: '700',
     fontSize: 17,
+    color: COLORS.title,
   },
 });
 

@@ -22,6 +22,7 @@ import {Expense, ExpenseSection} from '../redux/types';
 import ExpensesFiltersModal from '../components/ExpensesFiltersModal';
 import BottomModal from '../components/BottomModal';
 import {COLORS} from '../utils/constance';
+import {filterStr, filtersStr, totalExpensesStr} from '../constants';
 
 const HomeScreen = () => {
   const filteredExpensesRef = useRef([] as Expense[]);
@@ -30,7 +31,6 @@ const HomeScreen = () => {
 
   const dispatch = useDispatch();
   const {expenses, filters} = useSelector(state => state.expenses);
-  const totalExpensesString = 'Total Expenses: $';
 
   // Function to handle deleting an expense
   const handleDeleteExpense = (expenseId: string) => {
@@ -130,7 +130,7 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <View style={styles.topWrapper}>
           <Text style={styles.totalTile}>
-            {totalExpensesString}
+            {totalExpensesStr}
             {expenses.reduce((total, expense) => total + expense.amount, 0)}
           </Text>
 
@@ -139,7 +139,7 @@ const HomeScreen = () => {
               style={styles.filterButton}
               onPress={() => setFiltersModalVisible(!isFiltersModalVisible)}>
               <Image source={filterIcon} style={styles.containerIcon} />
-              <Text style={styles.filterText}>Filter</Text>
+              <Text style={styles.filterText}>{filterStr}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -148,7 +148,7 @@ const HomeScreen = () => {
       </View>
       {isFiltersModalVisible && (
         <BottomModal
-          title={'Filters'}
+          title={filtersStr}
           visible={isFiltersModalVisible}
           onClose={() => setFiltersModalVisible(!isFiltersModalVisible)}>
           <ExpensesFiltersModal onClearFilters={handleClearFilters} />
@@ -166,7 +166,6 @@ const styles = StyleSheet.create({
   topWrapper: {paddingHorizontal: 16},
   totalTile: {
     color: COLORS.title,
-    paddingLeft: 25,
     paddingRight: 3,
     paddingTop: 19,
     fontWeight: '400',
@@ -174,6 +173,8 @@ const styles = StyleSheet.create({
   },
   filterWrapper: {
     alignItems: 'flex-end',
+    paddingTop: 37,
+    paddingBottom: 11,
   },
   containerIcon: {
     width: 20,

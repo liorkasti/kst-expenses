@@ -3,7 +3,6 @@ import {
   Image,
   Modal,
   Platform,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,8 +10,8 @@ import {
 } from 'react-native';
 
 import closeIcon from '../assets/close.png';
+import {HIT_SLOP_10, hightStatusBar} from '../constants';
 import {COLORS} from '../utils/constance';
-import {HIT_SLOP_10} from '../constants';
 
 type BottomModalProps = {
   visible?: boolean;
@@ -27,8 +26,7 @@ const BottomModal: React.FC<BottomModalProps> = ({
   visible,
   title,
 }) => {
-  const hightStatusBar = StatusBar.currentHeight || 0;
-  const modalTopPadding: number =
+  const modalTopPadding: number = //TODO: hook
     title === 'Filters'
       ? Platform.OS === 'ios'
         ? 210

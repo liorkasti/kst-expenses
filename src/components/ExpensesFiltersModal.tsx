@@ -48,7 +48,6 @@ const ExpensesFiltersModal: React.FC<Props> = ({onClearFilters}) => {
         placeholderTextColor={COLORS.placeholder}
         style={styles.input}
       />
-
       <Text style={styles.inputTitle}>{dateStr}</Text>
       <TextInput
         value={dateFilter}

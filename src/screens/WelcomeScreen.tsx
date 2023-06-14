@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: COLORS.bkg,
   },
   title: {
     fontSize: 24,
@@ -68,6 +69,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   input: {
+    backgroundColor: COLORS.inputBkg,
     borderWidth: 1,
     borderColor: COLORS.thirdary,
     color: COLORS.thirdary,

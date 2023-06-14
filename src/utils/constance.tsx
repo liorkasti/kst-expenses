@@ -1,5 +1,5 @@
 const colorPalette = {
-  bkg: '#fff',
+  bkg: '#F5F5F5',
   primary: '#455EFF',
   secondary: '#696969',
   thirdary: '#5B58AD',
@@ -8,6 +8,7 @@ const colorPalette = {
   error: '#f13a59',
   placeholder: '#AAA9C0',
   title: '#000',
+  inputBkg: '#fff',
   inputTitle: '#8C8C8C',
   inputBorder: '#BFBFBF',
 };
