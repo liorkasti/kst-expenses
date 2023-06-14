@@ -22,6 +22,7 @@ const RootStackScreen = () => {
             headerShown: true,
             title: `${username}`,
             headerTitleAlign: 'center',
+            headerBackVisible: false,
           })}
         />
       </RootStack.Navigator>
