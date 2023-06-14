@@ -2,85 +2,114 @@ import React from 'react';
 import {
   Image,
   Modal,
+  Platform,
   StatusBar,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 
-import close from '../assets/close.png';
-import Button from './Button';
+import closeIcon from '../assets/close.png';
+import {COLORS} from '../utils/constance';
+import {HIT_SLOP_10} from '../constants';
 
 type BottomModalProps = {
   visible?: boolean;
   onClose: () => void;
   children?: any;
-  size: number;
+  title: string;
 };
 
 const BottomModal: React.FC<BottomModalProps> = ({
   children,
   onClose,
   visible,
-  modalsize,
-}) => (
-  <Modal
-    visible={visible}
-    onRequestClose={onClose}
-    animationType="slide"
-    transparent={true}
-    statusBarTranslucent={true}>
-    <TouchableOpacity
-      activeOpacity={1}
-      style={[
-        styles.container,
-        {paddingTop: modalsize + StatusBar.currentHeight},
-      ]}
-      onPress={onClose}>
-      <TouchableOpacity style={styles.modalContent}>
-        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <Image
-            source={close}
-            style={{
-              width: 13.5,
-              height: 13.5,
-            }}
-          />
-        </TouchableOpacity>
-        {children}
-        {/* <Button onPress={onButtonPress} text="Create" /> */}
+  title,
+}) => {
+  const hightStatusBar = StatusBar.currentHeight || 0;
+  const modalTopPadding: number =
+    title === 'Filters'
+      ? Platform.OS === 'ios'
+        ? 210
+        : 188
+      : Platform.OS === 'ios'
+      ? 90
+      : 60;
+
+  return (
+    <Modal
+      visible={visible}
+      onRequestClose={onClose}
+      animationType="fade"
+      transparent={true}
+      statusBarTranslucent={true}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={[
+          styles.container,
+          {paddingTop: modalTopPadding + hightStatusBar},
+        ]}>
+        <View style={styles.modalContent}>
+          <Text
+            style={[
+              styles.modalTitle,
+              {marginTop: title === 'Filters' ? -20 : 0},
+            ]}>
+            {title}
+          </Text>
+          <TouchableOpacity
+            hitSlop={HIT_SLOP_10}
+            style={styles.closeButton}
+            onPress={onClose}>
+            <Image source={closeIcon} style={styles.image} />
+          </TouchableOpacity>
+          {children}
+        </View>
       </TouchableOpacity>
-    </TouchableOpacity>
-  </Modal>
-);
+    </Modal>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
-
     height: '100%',
     width: '100%',
   },
+  modalTitle: {
+    color: COLORS.title,
+    fontSize: 18,
+    fontWeight: '400',
+    margin: 26,
+    textAlign: 'center',
+  },
   modalContent: {
-    backgroundColor: '#fff',
-    borderRadius: 22,
-    paddingHorizontal: 32,
-    paddingTop: 50,
+    backgroundColor: COLORS.bkg,
+    borderTopEndRadius: 22,
+    borderTopStartRadius: 22,
+    paddingHorizontal: 24,
+    paddingTop: 40,
     paddingBottom: 20,
     borderWidth: 1,
-    borderColor: '#A6A6A6',
+    borderColor: COLORS.text,
     height: '100%',
     width: '100%',
   },
   closeButton: {
     position: 'absolute',
-    top: 23.25,
-    right: 25.25,
+    top: 24,
+    right: 24,
   },
   closeButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  image: {
+    width: 24,
+    height: 24,
   },
 });
 

@@ -3,9 +3,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import WelcomeScreen from '../components/WelcomeScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
 import AppNavigation from './AppNavigation';
-import {StatusBar} from 'react-native';
 
 const RootStack = createNativeStackNavigator();
 

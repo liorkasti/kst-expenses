@@ -11,7 +11,7 @@ import {useDispatch} from 'react-redux';
 
 import {storeUser} from '../redux/slices/user-slice';
 import {COLORS} from '../utils/constance';
-import Button from './Button';
+import Button from '../components/Button';
 
 interface WelcomeScreenProps {
   onSaveName: (name: string, id: string) => void;
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: COLORS.thirdary,
+    color: COLORS.thirdary,
     borderRadius: 3,
     paddingTop: 28,
     paddingBottom: 9,

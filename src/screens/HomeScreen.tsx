@@ -19,9 +19,9 @@ import {
   deleteExpense,
 } from '../redux/slices/expenses-slice';
 import {Expense, ExpenseSection} from '../redux/types';
+import ExpensesFiltersModal from '../components/ExpensesFiltersModal';
+import BottomModal from '../components/BottomModal';
 import {COLORS} from '../utils/constance';
-import ExpensesFiltersModal from './ExpensesFiltersModal';
-import BottomModal from './BottomModal';
 
 const HomeScreen = () => {
   const filteredExpensesRef = useRef([] as Expense[]);
@@ -30,6 +30,7 @@ const HomeScreen = () => {
 
   const dispatch = useDispatch();
   const {expenses, filters} = useSelector(state => state.expenses);
+  const totalExpensesString = 'Total Expenses: $';
 
   // Function to handle deleting an expense
   const handleDeleteExpense = (expenseId: string) => {
@@ -49,7 +50,6 @@ const HomeScreen = () => {
   const handleClearFilters = () => {
     dispatch(setFilterTitle(''));
     dispatch(setFilterDate(null));
-    setFiltersModalVisible(false);
   };
 
   const handleFilteredExpenses = () => {
@@ -130,7 +130,7 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <View style={styles.topWrapper}>
           <Text style={styles.totalTile}>
-            Total Expenses:{' '}
+            {totalExpensesString}
             {expenses.reduce((total, expense) => total + expense.amount, 0)}
           </Text>
 
@@ -139,7 +139,7 @@ const HomeScreen = () => {
               style={styles.filterButton}
               onPress={() => setFiltersModalVisible(!isFiltersModalVisible)}>
               <Image source={filterIcon} style={styles.containerIcon} />
-              <Text style={styles.leftText}>Filter</Text>
+              <Text style={styles.filterText}>Filter</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -148,9 +148,9 @@ const HomeScreen = () => {
       </View>
       {isFiltersModalVisible && (
         <BottomModal
+          title={'Filters'}
           visible={isFiltersModalVisible}
-          onClose={() => setFiltersModalVisible(!isFiltersModalVisible)}
-          modalsize={460}>
+          onClose={() => setFiltersModalVisible(!isFiltersModalVisible)}>
           <ExpensesFiltersModal onClearFilters={handleClearFilters} />
         </BottomModal>
       )}
@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
   },
   topWrapper: {paddingHorizontal: 16},
   totalTile: {
+    color: COLORS.title,
     paddingLeft: 25,
     paddingRight: 3,
     paddingTop: 19,
@@ -188,11 +189,12 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     alignItems: 'center',
   },
-  leftText: {
+  filterText: {
     fontSize: 14,
     marginLeft: 10,
     fontWeight: '700',
     textAlign: 'center',
+    color: COLORS.title,
   },
   paymentTitle: {
     color: '#3E3E3E',
@@ -207,6 +209,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   sectionHeader: {
+    color: COLORS.title,
     fontSize: 14,
     paddingHorizontal: 16,
     paddingVertical: 4,

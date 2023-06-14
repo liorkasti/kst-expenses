@@ -1,5 +1,4 @@
-const colorPalette = {
-  bkg: '#fff',
+export default {
   primary: '#455EFF',
   secondary: '#696969',
   thirdary: '#5B58AD',
@@ -7,8 +6,4 @@ const colorPalette = {
   filter: '#D9D9D9',
   error: '#f13a59',
   placeholder: '#AAA9C0',
-  title: '#000',
-  inputTitle: '#8C8C8C',
-  inputBorder: '#BFBFBF',
 };
-export const COLORS = colorPalette;

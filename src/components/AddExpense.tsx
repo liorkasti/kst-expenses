@@ -15,6 +15,7 @@ import {addExpense} from '../redux/slices/expenses-slice';
 import {COLORS} from '../utils/constance';
 import close from '../assets/close.png';
 import Button from './Button';
+import {amountStr, dateStr, titleStr} from '../constants';
 
 interface AddExpenseModalProps {
   visible: boolean;
@@ -58,26 +59,25 @@ const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
 
   return (
     <>
-      <Text style={styles.modalTitle}>Create Expense</Text>
       <TextInput
         style={styles.input}
-        placeholder="Title"
+        placeholder={titleStr}
         placeholderTextColor={COLORS.placeholder}
         value={title}
         onChangeText={setTitle}
       />
       <TextInput
         style={styles.input}
-        placeholder="Amount"
+        placeholder={amountStr}
         placeholderTextColor={COLORS.placeholder}
         value={amount}
         onChangeText={setAmount}
         keyboardType="numeric"
       />
       <TextInput
-        style={styles.input}
-        placeholder="Date"
+        placeholder={dateStr}
         placeholderTextColor={COLORS.placeholder}
+        style={styles.input}
         value={date}
         onChangeText={setDate}
       />
@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
   },
   input: {
     borderBottomWidth: 1,
-    borderColor: '#BFBFBF',
+    color: COLORS.title,
+    borderColor: COLORS.inputBorder,
     borderRadius: 4,
     padding: 10,
     marginBottom: 50,

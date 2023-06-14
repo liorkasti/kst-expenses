@@ -13,8 +13,8 @@ import 'react-native-gesture-handler';
 
 import plus from '../assets/plusExpense.png';
 import AddExpense from '../components/AddExpense';
-import HomeScreen from '../components/HomeScreen';
-import ProfileScreen from '../components/ProfileScreen';
+import HomeScreen from '../screens/HomeScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import BottomModal from '../components/BottomModal';
 import {COLORS} from '../utils/constance';
 
@@ -78,9 +78,9 @@ const AppNavigation = ({navigation}) => {
               </TouchableOpacity>
 
               <BottomModal
+                title={'Create Expense'}
                 visible={isModalOpen}
-                onClose={() => setIsModalOpen(!isModalOpen)}
-                modalsize={60}>
+                onClose={() => setIsModalOpen(!isModalOpen)}>
                 <AddExpense onClose={handleCloseModal} />
               </BottomModal>
             </View>

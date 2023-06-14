@@ -1,15 +1,10 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {setFilterDate, setFilterTitle} from '../redux/slices/expenses-slice';
 import Button from './Button';
 import {COLORS} from '../utils/constance';
+import {HIT_SLOP_10, dateStr, titleStr} from '../constants';
 
 interface Props {
   // onFilter: () => void;
@@ -20,6 +15,9 @@ const ExpensesFiltersModal: React.FC<Props> = ({onClearFilters}) => {
   // State variables to store the filter values
   const [titleFilter, setTitleFilter] = useState('');
   const [dateFilter, setDateFilter] = useState(null);
+  const cleanString = 'clean';
+  const titlePH = 'Enter title:';
+  const datePH = 'Enter date:';
 
   const dispatch = useDispatch();
 
@@ -28,25 +26,35 @@ const ExpensesFiltersModal: React.FC<Props> = ({onClearFilters}) => {
     dispatch(setFilterDate(dateFilter));
   };
 
+  const onClear = () => {
+    setTitleFilter('');
+    setDateFilter(null);
+    onClearFilters;
+  };
+
   return (
     <>
-      <TouchableOpacity onPress={onClearFilters}>
-        <Text style={styles.cleanText}>Clear Filters</Text>
+      <Text style={styles.inputTitle}>{titleStr}</Text>
+      <TouchableOpacity
+        style={styles.cleanButton}
+        onPress={onClear}
+        hitSlop={HIT_SLOP_10}>
+        <Text style={styles.cleanText}>{cleanString}</Text>
       </TouchableOpacity>
-      <Text style={styles.modalTitle}>Filter</Text>
-      <Text>Filter by Title:</Text>
       <TextInput
         value={titleFilter}
         onChangeText={setTitleFilter}
-        placeholder="Enter title"
+        placeholder={titlePH}
+        placeholderTextColor={COLORS.placeholder}
         style={styles.input}
       />
 
-      <Text>Filter by Date:</Text>
+      <Text style={styles.inputTitle}>{dateStr}</Text>
       <TextInput
         value={dateFilter}
         onChangeText={setDateFilter}
-        placeholder="Enter date"
+        placeholder={datePH}
+        placeholderTextColor={COLORS.placeholder}
         style={styles.input}
       />
 
@@ -58,24 +66,24 @@ const ExpensesFiltersModal: React.FC<Props> = ({onClearFilters}) => {
 export default ExpensesFiltersModal;
 
 const styles = StyleSheet.create({
+  cleanButton: {
+    width: 120,
+  },
   cleanText: {
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: -30,
+    marginTop: -64,
     color: COLORS.primary,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '400',
-    marginBottom: 20,
-    textAlign: 'center',
-    marginTop: -30,
   },
   input: {
     borderBottomWidth: 1,
-    borderColor: '#BFBFBF',
+    color: COLORS.title,
+    borderColor: COLORS.inputBorder,
     borderRadius: 4,
     padding: 10,
     marginBottom: 50,
+  },
+  inputTitle: {
+    color: COLORS.inputTitle,
   },
 });
