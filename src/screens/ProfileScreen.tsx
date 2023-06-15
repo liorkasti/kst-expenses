@@ -2,24 +2,21 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {signOutStr, totalExpensesItemsStr} from '../constants';
 import {removeUser} from '../redux/slices/user-slice';
-import {
-  NavigationContainerProps,
-  useNavigation,
-} from '@react-navigation/native';
-import {signOutStr, totalExpensesStr} from '../constants';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {RootState} from '../redux/store';
+import {RootStackParamList} from '../redux/types';
 import {COLORS} from '../utils/constance';
 
-type Props = {
-  navigation: NavigationContainerProps;
+type ProfileScreenProps = {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'ProfileScreen'>;
 };
 
-const ProfileScreen = ({}) => {
+const ProfileScreen: React.FC<ProfileScreenProps> = ({navigation}) => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
 
-  const {expenses, filters} = useSelector(state => state.expenses);
+  const {expenses} = useSelector((state: RootState) => state.expenses);
 
   const handleSignout = () => {
     dispatch(removeUser());
@@ -28,10 +25,8 @@ const ProfileScreen = ({}) => {
   return (
     <View style={styles.container}>
       <View style={styles.totalLine}>
-        <Text style={styles.text}>{totalExpensesStr}</Text>
-        <Text style={styles.total}>
-          {expenses.reduce((total, expense) => total + expense.amount, 0)}
-        </Text>
+        <Text style={styles.text}>{totalExpensesItemsStr}</Text>
+        <Text style={styles.total}>{expenses.length}</Text>
       </View>
       <View
         style={{

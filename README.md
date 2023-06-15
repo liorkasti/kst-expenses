@@ -29,8 +29,9 @@ Enjoy! thank you.
 
 ### TODOs:
 
+- [ ] Enhance filter logic.
 - [ ] Enhance input data validate.
-- [ ] Add types file.
+- [ ] Add testing.
 - [ ] Add index types for assets.
 - [ ] Upgrade theming and handle dark mode.
 - [x] Add a modal filter by title and date.

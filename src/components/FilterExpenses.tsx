@@ -6,12 +6,15 @@ import Button from './Button';
 import {COLORS} from '../utils/constance';
 import {HIT_SLOP_10, dateStr, titleStr} from '../constants';
 
-interface Props {
-  // onFilter: () => void;
+interface FilterExpensesProps {
+  onFilter: () => void;
   onClearFilters: () => void;
 }
 
-const ExpensesFiltersModal: React.FC<Props> = ({onClearFilters}) => {
+const FilterExpenses: React.FC<FilterExpensesProps> = ({
+  onFilter,
+  onClearFilters,
+}) => {
   // State variables to store the filter values
   const [titleFilter, setTitleFilter] = useState('');
   const [dateFilter, setDateFilter] = useState(null);
@@ -21,9 +24,11 @@ const ExpensesFiltersModal: React.FC<Props> = ({onClearFilters}) => {
 
   const dispatch = useDispatch();
 
+  //TODO: this should be an outer hooke function
   const handleFilterExpenses = () => {
     dispatch(setFilterTitle(titleFilter));
     dispatch(setFilterDate(dateFilter));
+    onFilter();
   };
 
   const onClear = () => {
@@ -62,7 +67,7 @@ const ExpensesFiltersModal: React.FC<Props> = ({onClearFilters}) => {
   );
 };
 
-export default ExpensesFiltersModal;
+export default FilterExpenses;
 
 const styles = StyleSheet.create({
   cleanButton: {

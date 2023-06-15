@@ -17,7 +17,7 @@ export interface ExpenseSection {
 }
 
 export interface Filters {
-  title: string;
+  title: string | '';
   date: Date | null;
 }
 
@@ -35,3 +35,10 @@ interface DeleteExpenseAction {
 }
 
 export type ExpenseActionTypes = AddExpenseAction | DeleteExpenseAction;
+
+export type RootStackParamList = {
+  WelcomeScreen: undefined;
+  HomeScreen: undefined;
+  ProfileScreen: undefined;
+  AppNavigation: undefined;
+};

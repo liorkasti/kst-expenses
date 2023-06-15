@@ -19,26 +19,24 @@ import {
   deleteExpense,
 } from '../redux/slices/expenses-slice';
 import {Expense, ExpenseSection} from '../redux/types';
-import ExpensesFiltersModal from '../components/ExpensesFiltersModal';
+import FilterExpenses from '../components/FilterExpenses';
 import BottomModal from '../components/BottomModal';
 import {COLORS} from '../utils/constance';
 import {filterStr, filtersStr, totalExpensesStr} from '../constants';
+import {RootState} from '../redux/store';
 
 const HomeScreen = () => {
   const filteredExpensesRef = useRef([] as Expense[]);
-  const expenseSectionsRef = useRef([] as ExpenseSection);
   const [isFiltersModalVisible, setFiltersModalVisible] = useState(false);
 
   const dispatch = useDispatch();
-  const {expenses, filters} = useSelector(state => state.expenses);
+  const {expenses, filters} = useSelector((state: RootState) => state.expenses);
 
-  // Function to handle deleting an expense
   const handleDeleteExpense = (expenseId: string) => {
     dispatch(deleteExpense(expenseId));
     updateLocalStorage();
   };
 
-  // Function to update the expenses in local storage
   const updateLocalStorage = async () => {
     try {
       await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
@@ -53,7 +51,6 @@ const HomeScreen = () => {
   };
 
   const handleFilteredExpenses = () => {
-    // Apply filters to the expenses based on the filter values
     let filteredExpenses = expenses;
 
     if (filters.title) {
@@ -72,22 +69,17 @@ const HomeScreen = () => {
     filteredExpensesRef.current = filteredExpenses;
   };
 
-  // Render each expense section based on the filtered expenses
   const renderExpenseSections = () => {
     handleFilteredExpenses();
-    // Group the expenses by date
-    const expenseSections = [] as unknown as ExpenseSection;
+    const expenseSections: ExpenseSection[] = [];
     let currentSection: {title: string; data: Expense[]} | null = null;
 
     filteredExpensesRef.current.forEach(expense => {
       const expenseDate = expense.date;
-      // const expenseDate = expense.date.toDateString();
       if (!currentSection || currentSection.title !== expenseDate) {
-        // Create a new section
         currentSection = {title: expenseDate, data: [expense]};
         expenseSections.push(currentSection);
       } else {
-        // Add the expense to the current section
         currentSection.data.push(expense);
       }
     });
@@ -151,7 +143,10 @@ const HomeScreen = () => {
           title={filtersStr}
           visible={isFiltersModalVisible}
           onClose={() => setFiltersModalVisible(!isFiltersModalVisible)}>
-          <ExpensesFiltersModal onClearFilters={handleClearFilters} />
+          <FilterExpenses
+            onFilter={() => setFiltersModalVisible(!isFiltersModalVisible)}
+            onClearFilters={handleClearFilters}
+          />
         </BottomModal>
       )}
     </>

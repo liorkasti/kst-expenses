@@ -38,7 +38,7 @@ const expensesSlice = createSlice({
         expense => expense.id !== expenseId,
       );
     },
-    setFilterTitle: (state, action: PayloadAction<string>) => {
+    setFilterTitle: (state, action: PayloadAction<string | ''>) => {
       state.filters.title = action.payload;
     },
     setFilterDate: (state, action: PayloadAction<Date | null>) => {
@@ -51,6 +51,7 @@ const expensesSlice = createSlice({
   },
 });
 
+//TODO: finish this..
 export const selectFilteredExpenses = (state: RootState) => {
   const {title, date} = state.expenses.filters;
   return state.expenses.expenses.filter(expense => {

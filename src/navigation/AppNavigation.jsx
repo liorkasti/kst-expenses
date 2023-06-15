@@ -35,6 +35,7 @@ const AppNavigation = ({navigation}) => {
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
+        tabBarStyle: {height: 87},
       }}>
       <Tab.Screen
         name={'Home'}
@@ -64,7 +65,7 @@ const AppNavigation = ({navigation}) => {
                     borderRadius: 30,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginBottom: Platform.OS == 'android' ? 50 : 30,
+                    marginBottom: Platform.OS == 'android' ? 80 : 50,
                   }}>
                   <Image
                     source={plus}

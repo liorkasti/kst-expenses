@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,35 +12,20 @@ import {useDispatch} from 'react-redux';
 import {storeUser} from '../redux/slices/user-slice';
 import {COLORS} from '../utils/constance';
 import Button from '../components/Button';
+import useLogin from '../hooks/useLogin';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../redux/types';
 
 interface WelcomeScreenProps {
-  onSaveName: (name: string, id: string) => void;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'WelcomeScreen'>;
 }
 
-const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
-  navigation,
-  onSaveName,
-}) => {
-  const [name, setName] = useState('');
+const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
+  const {name, setName, id, handleLoginPress} = useLogin();
 
-  const dispatch = useDispatch();
-
-  const handleLoginPress = async () => {
-    const isValidName = /^[A-Za-z]{2,20}$/.test(name);
-    if (isValidName) {
-      try {
-        await AsyncStorage.setItem('user', JSON.stringify({name}));
-        dispatch(storeUser(name));
-        // onSaveName(name, Math.random().toString(36).substr(2, 5));
-        navigation.navigate('AppNavigation');
-      } catch (error) {
-        console.error(error);
-        alert('Failed to save user data');
-      }
-    } else {
-      alert('Please enter a valid name between 2 to 20 characters');
-    }
-  };
+  useEffect(() => {
+    navigation.navigate('AppNavigation');
+  }, [id, navigation]);
 
   return (
     <View style={styles.container}>
