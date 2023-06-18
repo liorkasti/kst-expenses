@@ -1,7 +1,7 @@
-import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import userReducer from './slices/user-slice';
-import expensesReducer from './slices/expenses-slice';
+import {configureStore} from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
+import expensesReducer from './slices/expenses-slice';
+import userReducer from './slices/user-slice';
 
 const store = configureStore({
   reducer: {
@@ -10,12 +10,5 @@ const store = configureStore({
   },
   middleware: [thunk],
 });
-
-const rootReducer = combineReducers({
-  user: userReducer,
-  expenses: expensesReducer,
-});
-
-export type RootState = ReturnType<typeof rootReducer>;
 
 export default store;

@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
-  FlatList,
   Image,
   SectionList,
   StyleSheet,
@@ -13,17 +12,17 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import closeIcon from '../assets/close.png';
 import filterIcon from '../assets/filter.png';
-import {
-  setFilterTitle,
-  setFilterDate,
-  deleteExpense,
-} from '../redux/slices/expenses-slice';
-import {Expense, ExpenseSection} from '../redux/types';
-import FilterExpenses from '../components/FilterExpenses';
 import BottomModal from '../components/BottomModal';
-import {COLORS} from '../utils/constance';
+import FilterExpenses from '../components/FilterExpenses';
 import {filterStr, filtersStr, totalExpensesStr} from '../constants';
-import {RootState} from '../redux/store';
+import {
+  deleteExpense,
+  setFilterDate,
+  setFilterTitle,
+} from '../redux/slices/expenses-slice';
+import {RootState} from '../redux/types';
+import {Expense, ExpenseSection} from '../redux/types';
+import {COLORS} from '../utils/constance';
 
 const HomeScreen = () => {
   const filteredExpensesRef = useRef([] as Expense[]);
@@ -67,6 +66,7 @@ const HomeScreen = () => {
       );
     }
     filteredExpensesRef.current = filteredExpenses;
+    // console.log('filteredExpensesRef.current', filteredExpensesRef.current);
   };
 
   const renderExpenseSections = () => {

@@ -1,20 +1,11 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {useDispatch} from 'react-redux';
+import React, {useEffect} from 'react';
+import {StyleSheet, TextInput, View} from 'react-native';
 
-import {storeUser} from '../redux/slices/user-slice';
-import {COLORS} from '../utils/constance';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Button from '../components/Button';
 import useLogin from '../hooks/useLogin';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../redux/types';
+import {COLORS} from '../utils/constance';
 
 interface WelcomeScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'WelcomeScreen'>;
@@ -24,7 +15,9 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
   const {name, setName, id, handleLoginPress} = useLogin();
 
   useEffect(() => {
-    navigation.navigate('AppNavigation');
+    if (id) {
+      navigation.navigate('AppNavigation');
+    }
   }, [id, navigation]);
 
   return (

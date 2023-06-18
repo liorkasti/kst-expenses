@@ -1,5 +1,6 @@
 export interface UserState {
   username: string;
+  id: string;
 }
 export interface Expense {
   id: string;
@@ -10,6 +11,7 @@ export interface Expense {
 
 export interface ExpenseState {
   expenses: Expense[];
+  filters: Filters;
 }
 export interface ExpenseSection {
   title: string;
@@ -27,6 +29,12 @@ export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 interface AddExpenseAction {
   type: typeof ADD_EXPENSE;
   payload: Expense;
+}
+
+export interface RootState {
+  expenses: ExpenseState;
+  filters: Filters;
+  user: UserState;
 }
 
 interface DeleteExpenseAction {

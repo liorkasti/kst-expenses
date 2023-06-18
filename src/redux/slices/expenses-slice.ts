@@ -1,10 +1,10 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {RootState} from '../store';
+import {RootState} from '../types';
 import {Expense, Filters} from '../types';
 
 interface ExpensesState {
   expenses: Expense[];
-  filters: Filters[];
+  filters: Filters;
 }
 
 const initialState: ExpensesState = {

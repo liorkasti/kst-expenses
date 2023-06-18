@@ -2,7 +2,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useState} from 'react';
 import {
   Image,
-  Modal,
   Platform,
   StyleSheet,
   Text,
@@ -13,14 +12,14 @@ import 'react-native-gesture-handler';
 
 import plus from '../assets/plusExpense.png';
 import AddExpense from '../components/AddExpense';
+import BottomModal from '../components/BottomModal';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import BottomModal from '../components/BottomModal';
 import {COLORS} from '../utils/constance';
 
 const Tab = createBottomTabNavigator();
 
-const AppNavigation = ({navigation}) => {
+const AppNavigation = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -104,14 +103,5 @@ const AppNavigation = ({navigation}) => {
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default AppNavigation;
