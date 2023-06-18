@@ -5,18 +5,21 @@ import {useDispatch, useSelector} from 'react-redux';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {signOutStr, totalExpensesItemsStr} from '../constants';
 import {removeUser} from '../redux/slices/user-slice';
-import {RootState} from '../redux/types';
-import {RootStackParamList} from '../redux/types';
+import {RootStateType} from '../redux/types';
+import {RootStackParamListType} from '../redux/types';
 import {COLORS} from '../utils/constance';
 
 type ProfileScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'ProfileScreen'>;
+  navigation: NativeStackNavigationProp<
+    RootStackParamListType,
+    'ProfileScreen'
+  >;
 };
 
 const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
   const dispatch = useDispatch();
 
-  const {expenses} = useSelector((state: RootState) => state.expenses);
+  const {expenses} = useSelector((state: RootStateType) => state.expenses);
 
   const handleSignout = () => {
     dispatch(removeUser());

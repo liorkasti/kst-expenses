@@ -1,10 +1,27 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
 import React, {FC, useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import {useDispatch} from 'react-redux';
+import moment from 'moment';
+
+import {
+  HIT_SLOP_10,
+  cleanString,
+  datePH,
+  dateStr,
+  titlePH,
+  titleStr,
+} from '../constants';
 import {setFilterDate, setFilterTitle} from '../redux/slices/expenses-slice';
-import Button from './Button';
 import {COLORS} from '../utils/constance';
-import {HIT_SLOP_10, dateStr, titleStr} from '../constants';
+import Button from './Button';
+import {formattedDate} from '../hooks';
 
 interface FilterExpensesProps {
   onFilter: () => void;
@@ -15,26 +32,35 @@ const FilterExpenses: FC<FilterExpensesProps> = ({
   onFilter,
   onClearFilters,
 }) => {
-  // State variables to store the filter values
-  const [titleFilter, setTitleFilter] = useState('');
-  const [dateFilter, setDateFilter] = useState(null);
-  const cleanString = 'clean';
-  const titlePH = 'Enter title:';
-  const datePH = 'Enter date:';
+  const [titleFilter, setTitleFilter] = useState<string>('');
+  const [dateFilter, setDateFilter] = useState<Date | null>(null);
 
+  const [isPickerShow, setIsPickerShow] = useState(false);
+
+  const showPicker = () => {
+    setIsPickerShow(true);
+  };
+
+  const onChangeDateFilter = (event: Event, value?: Date | undefined) => {
+    if (value) {
+      setDateFilter(value);
+    }
+    if (Platform.OS === 'android') {
+      setIsPickerShow(false);
+    }
+  };
   const dispatch = useDispatch();
 
-  //TODO: this should be an outer hooke function
-  const handleFilterExpenses = () => {
+  const handleFilterExpenses = (): void => {
     dispatch(setFilterTitle(titleFilter));
-    dispatch(setFilterDate(dateFilter));
+    dispatch(setFilterDate(moment(dateFilter).format('DD.MM.YYYY')));
     onFilter();
   };
 
-  const onClear = () => {
+  const onClear = (): void => {
     setTitleFilter('');
     setDateFilter(null);
-    onClearFilters;
+    onClearFilters();
   };
 
   return (
@@ -54,14 +80,38 @@ const FilterExpenses: FC<FilterExpensesProps> = ({
         style={styles.input}
       />
       <Text style={styles.inputTitle}>{dateStr}</Text>
-      <TextInput
-        value={dateFilter}
-        onChangeText={setDateFilter}
-        placeholder={datePH}
-        placeholderTextColor={COLORS.placeholder}
+      <TouchableOpacity
         style={styles.input}
-      />
-
+        onPress={showPicker}
+        hitSlop={HIT_SLOP_10}>
+        {dateFilter ? (
+          <Text style={styles.inputTitle}>{formattedDate(dateFilter)}</Text>
+        ) : (
+          <Text style={[styles.inputTitle, {color: COLORS.placeholder}]}>
+            {datePH}
+          </Text>
+        )}
+      </TouchableOpacity>
+      {isPickerShow && (
+        <DateTimePicker
+          value={dateFilter || new Date()}
+          mode={'date'}
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          is24Hour={true}
+          onChange={onChangeDateFilter}
+          style={styles.datePicker}
+        />
+      )}
+      {Platform.OS === 'ios' && isPickerShow && (
+        <TouchableOpacity
+          style={styles.setButton}
+          onPress={() => {
+            setIsPickerShow(false);
+          }}
+          hitSlop={HIT_SLOP_10}>
+          <Text style={styles.setText}>Set</Text>
+        </TouchableOpacity>
+      )}
       <Button text={'Filter'} onButtonPress={handleFilterExpenses} />
     </>
   );
@@ -89,5 +139,17 @@ const styles = StyleSheet.create({
   },
   inputTitle: {
     color: COLORS.inputTitle,
+  },
+  dateText: {
+    color: COLORS.title,
+    padding: 10,
+    marginBottom: 50,
+  },
+  datePicker: {
+    width: 320,
+    height: 260,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
 });

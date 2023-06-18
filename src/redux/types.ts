@@ -1,52 +1,51 @@
-export interface UserState {
+import {TextInputProps} from 'react-native';
+
+export interface UserStateType {
   username: string;
   id: string;
 }
-export interface Expense {
+export interface ExpenseType {
   id: string;
   title: string;
   amount: number;
   date: string;
 }
 
-export interface ExpenseState {
-  expenses: Expense[];
-  filters: Filters;
+export interface ExpensesStateType {
+  expenses: ExpenseType[];
+  filters: FiltersType;
 }
-export interface ExpenseSection {
+export interface ExpenseSectionType {
   title: string;
-  data: Expense[];
+  data: ExpenseType[];
 }
 
-export interface Filters {
+export interface FiltersType {
   title: string | '';
-  date: Date | null;
+  date: string;
 }
 
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
-interface AddExpenseAction {
-  type: typeof ADD_EXPENSE;
-  payload: Expense;
+export interface RootStateType {
+  expenses: ExpensesStateType;
+  user: UserStateType;
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error: string | null;
 }
 
-export interface RootState {
-  expenses: ExpenseState;
-  filters: Filters;
-  user: UserState;
-}
-
-interface DeleteExpenseAction {
-  type: typeof DELETE_EXPENSE;
-  payload: string; // the ID of the expense to be deleted
-}
-
-export type ExpenseActionTypes = AddExpenseAction | DeleteExpenseAction;
-
-export type RootStackParamList = {
+export type RootStackParamListType = {
   WelcomeScreen: undefined;
   HomeScreen: undefined;
   ProfileScreen: undefined;
   AppNavigation: undefined;
 };
+
+export interface InputType {
+  label: string;
+  textInputConfig?: TextInputProps;
+  style?: {};
+  testID?: string;
+  invalid: boolean;
+}

@@ -4,11 +4,14 @@ import {StyleSheet, TextInput, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Button from '../components/Button';
 import useLogin from '../hooks/useLogin';
-import {RootStackParamList} from '../redux/types';
+import {RootStackParamListType} from '../redux/types';
 import {COLORS} from '../utils/constance';
 
 interface WelcomeScreenProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'WelcomeScreen'>;
+  navigation: NativeStackNavigationProp<
+    RootStackParamListType,
+    'WelcomeScreen'
+  >;
 }
 
 const WelcomeScreen: FC<WelcomeScreenProps> = ({navigation}) => {

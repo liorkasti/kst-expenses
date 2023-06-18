@@ -9,5 +9,7 @@ export const filtersStr = 'Filters';
 export const signOutStr = 'Sign Out';
 export const totalExpensesStr = 'Total Expenses: $';
 export const totalExpensesItemsStr = 'Total Expenses Items';
-
+export const cleanString: string = 'clean';
+export const titlePH: string = 'Enter title';
+export const datePH: string = 'Enter date';
 export const hightStatusBar = StatusBar.currentHeight || 0;

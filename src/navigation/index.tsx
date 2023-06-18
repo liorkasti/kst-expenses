@@ -3,13 +3,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import {RootState} from '../redux/types';
+import {RootStateType} from '../redux/types';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import AppNavigation from './AppNavigation';
 
 const RootStack = createNativeStackNavigator();
 const RootStackScreen = () => {
-  const {username} = useSelector((state: RootState) => state.user);
+  const {username} = useSelector((state: RootStateType) => state.user);
 
   return (
     <NavigationContainer>

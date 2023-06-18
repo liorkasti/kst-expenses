@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useRef, useState} from 'react';
 import {
+  Alert,
   Image,
   SectionList,
   StyleSheet,
@@ -17,19 +18,23 @@ import FilterExpenses from '../components/FilterExpenses';
 import {filterStr, filtersStr, totalExpensesStr} from '../constants';
 import {
   deleteExpense,
+  filteredData,
   setFilterDate,
   setFilterTitle,
 } from '../redux/slices/expenses-slice';
-import {RootState} from '../redux/types';
-import {Expense, ExpenseSection} from '../redux/types';
+import {RootStateType} from '../redux/types';
+import {ExpenseType, ExpenseSectionType} from '../redux/types';
 import {COLORS} from '../utils/constance';
+import moment from 'moment';
 
 const HomeScreen = () => {
-  const filteredExpensesRef = useRef([] as Expense[]);
+  const filteredExpensesRef = useRef([] as ExpenseType[]);
   const [isFiltersModalVisible, setFiltersModalVisible] = useState(false);
 
   const dispatch = useDispatch();
-  const {expenses, filters} = useSelector((state: RootState) => state.expenses);
+  const {expenses, filters} = useSelector(
+    (state: RootStateType) => state.expenses,
+  );
 
   const handleDeleteExpense = (expenseId: string) => {
     dispatch(deleteExpense(expenseId));
@@ -51,28 +56,34 @@ const HomeScreen = () => {
 
   const handleFilteredExpenses = () => {
     let filteredExpenses = expenses;
+    const {title, date} = filters;
 
-    if (filters.title) {
-      filteredExpenses = filteredExpenses.filter((expense: Expense) =>
-        expense.title.toLowerCase().includes(filters.title.toLowerCase()),
-      );
-    }
-    if (filters.date) {
+    if (title && date) {
       filteredExpenses = filteredExpenses.filter(
-        (expense: Expense) =>
-          expense.date.getFullYear() === filters.date!.getFullYear() &&
-          expense.date.getMonth() === filters.date!.getMonth() &&
-          expense.date.getDate() === filters.date!.getDate(),
+        expense =>
+          expense?.date === date &&
+          expense.title.toLowerCase().includes(title.toLowerCase()),
+      );
+    } else if (title) {
+      filteredExpenses = filteredExpenses.filter(expense =>
+        expense.title.toLowerCase().includes(title.toLowerCase()),
+      );
+    } else if (date) {
+      filteredExpenses = filteredExpenses.filter(
+        expense => expense?.date === date,
       );
     }
-    filteredExpensesRef.current = filteredExpenses;
-    // console.log('filteredExpensesRef.current', filteredExpensesRef.current);
+    if (filteredExpenses.length > 0) {
+      filteredExpensesRef.current = filteredExpenses;
+    } else {
+      filteredExpensesRef.current = expenses;
+    }
   };
 
   const renderExpenseSections = () => {
     handleFilteredExpenses();
-    const expenseSections: ExpenseSection[] = [];
-    let currentSection: {title: string; data: Expense[]} | null = null;
+    const expenseSections: ExpenseSectionType[] = [];
+    let currentSection: {title: string; data: ExpenseType[]} | null = null;
 
     filteredExpensesRef.current.forEach(expense => {
       const expenseDate = expense.date;

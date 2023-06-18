@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {FC, useState} from 'react';
-import {StyleSheet, TextInput} from 'react-native';
+import {StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 
-import {amountStr, dateStr, titleStr} from '../constants';
+import {HIT_SLOP_10, amountStr, dateStr, titleStr} from '../constants';
 import {addExpense} from '../redux/slices/expenses-slice';
-import {Expense} from '../redux/types';
+import {ExpenseType} from '../redux/types';
 import {COLORS} from '../utils/constance';
 import Button from './Button';
 
@@ -23,7 +23,7 @@ const AddExpense: FC<AddExpenseModalProps> = ({onClose}) => {
   const handleCreate = async () => {
     try {
       if (title && amount && date) {
-        const newExpense: Expense = {
+        const newExpense: ExpenseType = {
           id: Date.now().toString(),
           title,
           amount: parseFloat(amount),
@@ -64,13 +64,39 @@ const AddExpense: FC<AddExpenseModalProps> = ({onClose}) => {
         onChangeText={setAmount}
         keyboardType="numeric"
       />
-      <TextInput
-        placeholder={dateStr}
-        placeholderTextColor={COLORS.placeholder}
+      <TouchableOpacity
         style={styles.input}
-        value={date}
-        onChangeText={setDate}
-      />
+        onPress={showPicker}
+        hitSlop={HIT_SLOP_10}>
+        {date ? (
+          <Text style={styles.inputTitle}>{formattedDate(date)}</Text>
+        ) : (
+          <Text style={[styles.inputTitle, {color: COLORS.placeholder}]}>
+            {datePH}
+          </Text>
+        )}
+      </TouchableOpacity>
+      {isPickerShow && (
+        <DateTimePicker
+          value={date || new Date()}
+          mode={'date'}
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          is24Hour={true}
+          onChange={onChangeDate}
+          style={styles.datePicker}
+        />
+      )}
+      {Platform.OS === 'ios' && isPickerShow && (
+        <TouchableOpacity
+          style={styles.setButton}
+          onPress={() => {
+            setIsPickerShow(false);
+          }}
+          hitSlop={HIT_SLOP_10}>
+          <Text style={styles.setText}>Set</Text>
+        </TouchableOpacity>
+      )}
+
       <Button onButtonPress={handleCreate} text="Create" />
     </>
   );
@@ -90,6 +116,18 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 10,
     marginBottom: 50,
+  },
+  dateText: {
+    color: COLORS.title,
+    padding: 10,
+    marginBottom: 50,
+  },
+  datePicker: {
+    width: 320,
+    height: 260,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
 });
 
