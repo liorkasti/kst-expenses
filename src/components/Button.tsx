@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {COLORS} from '../utils/constance';
 
@@ -7,7 +7,7 @@ type ButtonProps = {
   text: string;
 };
 
-const Button: React.FC<ButtonProps> = ({onButtonPress, text}) => {
+const Button: FC<ButtonProps> = ({onButtonPress, text}) => {
   return (
     <TouchableOpacity style={styles.button} onPress={onButtonPress}>
       <Text style={styles.buttonText}>{text}</Text>

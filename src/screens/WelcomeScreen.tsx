@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
 
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -11,7 +11,7 @@ interface WelcomeScreenProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'WelcomeScreen'>;
 }
 
-const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
+const WelcomeScreen: FC<WelcomeScreenProps> = ({navigation}) => {
   const {name, setName, id, handleLoginPress} = useLogin();
 
   useEffect(() => {

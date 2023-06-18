@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {
   Image,
   Modal,
@@ -20,7 +20,7 @@ type BottomModalProps = {
   title: string;
 };
 
-const BottomModal: React.FC<BottomModalProps> = ({
+const BottomModal: FC<BottomModalProps> = ({
   children,
   onClose,
   visible,

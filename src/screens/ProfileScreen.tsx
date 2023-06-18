@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -13,7 +13,7 @@ type ProfileScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'ProfileScreen'>;
 };
 
-const ProfileScreen: React.FC<ProfileScreenProps> = ({navigation}) => {
+const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
   const dispatch = useDispatch();
 
   const {expenses} = useSelector((state: RootState) => state.expenses);

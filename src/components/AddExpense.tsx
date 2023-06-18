@@ -1,34 +1,24 @@
-import React, {useState} from 'react';
-import {
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  StatusBar,
-} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {FC, useState} from 'react';
+import {StyleSheet, TextInput} from 'react-native';
+import {useDispatch} from 'react-redux';
 
-import {Expense} from '../redux/types';
-import {addExpense} from '../redux/slices/expenses-slice';
-import {COLORS} from '../utils/constance';
-import close from '../assets/close.png';
-import Button from './Button';
 import {amountStr, dateStr, titleStr} from '../constants';
+import {addExpense} from '../redux/slices/expenses-slice';
+import {Expense} from '../redux/types';
+import {COLORS} from '../utils/constance';
+import Button from './Button';
 
 interface AddExpenseModalProps {
-  visible: boolean;
   onClose: () => void;
 }
 
-const AddExpense: React.FC<AddExpenseModalProps> = ({onClose}) => {
+const AddExpense: FC<AddExpenseModalProps> = ({onClose}) => {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(null);
 
   const dispatch = useDispatch();
-  const {expenses} = useSelector(state => state.expenses);
 
   const handleCreate = async () => {
     try {

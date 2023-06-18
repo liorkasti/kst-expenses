@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {setFilterDate, setFilterTitle} from '../redux/slices/expenses-slice';
@@ -11,7 +11,7 @@ interface FilterExpensesProps {
   onClearFilters: () => void;
 }
 
-const FilterExpenses: React.FC<FilterExpensesProps> = ({
+const FilterExpenses: FC<FilterExpensesProps> = ({
   onFilter,
   onClearFilters,
 }) => {

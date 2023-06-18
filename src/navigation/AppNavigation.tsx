@@ -1,13 +1,6 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useState} from 'react';
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Platform, Text, TouchableOpacity, View} from 'react-native';
 import 'react-native-gesture-handler';
 
 import plus from '../assets/plusExpense.png';
