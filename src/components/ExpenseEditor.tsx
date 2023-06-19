@@ -1,7 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import React, {FC, useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {useDispatch} from 'react-redux';
 import {
@@ -15,6 +21,7 @@ import {
   titlePH,
   titleStr,
 } from '../constants';
+import useInputValidation from '../hooks/useInputValidation';
 import {
   addExpense,
   clearFilters,
@@ -32,8 +39,15 @@ interface ExpenseEditorProps {
 }
 
 const ExpenseEditor: FC<ExpenseEditorProps> = ({onClose, isFilterEditor}) => {
-  const [title, setTitle] = useState('');
-  const [amount, setAmount] = useState('');
+  const {
+    title,
+    setTitle,
+    amount,
+    setAmount,
+    titleError,
+    amountError,
+    validateInputs,
+  } = useInputValidation();
   const [titleFilter, setTitleFilter] = useState<string>('');
   const [date, setDate] = useState<string>('');
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -49,13 +63,23 @@ const ExpenseEditor: FC<ExpenseEditorProps> = ({onClose, isFilterEditor}) => {
 
   const handleCreate = async () => {
     try {
-      if (title && amount && date) {
-        const newExpense: ExpenseType = {
-          id: Date.now().toString(),
-          title,
-          amount: parseFloat(amount),
-          date,
-        };
+      if (titleError) {
+        Alert.alert(titleError);
+      }
+      if (amountError) {
+        Alert.alert(amountError);
+      }
+      if (validateInputs() && title && amount) {
+        if (date) {
+          const newExpense: ExpenseType = {
+            id: Date.now().toString(),
+            title,
+            amount: parseFloat(amount),
+            date,
+          };
+        } else {
+          Alert.alert('Invalid date');
+        }
         // Saving the expense to AsyncStorage
         const savedExpenses = await AsyncStorage.getItem('expenses');
         let localExpenses = savedExpenses ? JSON.parse(savedExpenses) : [];

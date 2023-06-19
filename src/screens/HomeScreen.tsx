@@ -56,6 +56,11 @@ const HomeScreen = () => {
     }
   };
 
+  const onClear = (): void => {
+    dispatch(clearFilterData());
+    filteredExpensesRef.current = expenses;
+  };
+
   const renderExpenseSections = () => {
     handleFilteredExpenses();
     const expenseSections: ExpenseSectionType[] = [];
@@ -90,11 +95,6 @@ const HomeScreen = () => {
         )}
       />
     );
-  };
-
-  const onClear = (): void => {
-    dispatch(clearFilterData());
-    filteredExpensesRef.current = expenses;
   };
 
   return (
