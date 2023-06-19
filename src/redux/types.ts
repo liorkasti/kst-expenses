@@ -1,5 +1,7 @@
 import {TextInputProps} from 'react-native';
 
+export const ADD_EXPENSE = 'ADD_EXPENSE';
+export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 export interface UserStateType {
   username: string;
   id: string;
@@ -13,6 +15,7 @@ export interface ExpenseType {
 
 export interface ExpensesStateType {
   expenses: ExpenseType[];
+  filteredData: ExpenseType[];
   filters: FiltersType;
 }
 export interface ExpenseSectionType {
@@ -22,17 +25,20 @@ export interface ExpenseSectionType {
 
 export interface FiltersType {
   title: string | '';
-  date: string;
+  date: string | '';
 }
-
-export const ADD_EXPENSE = 'ADD_EXPENSE';
-export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 export interface RootStateType {
   expenses: ExpensesStateType;
   user: UserStateType;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
+}
+
+export interface ExpensesStateType {
+  expenses: ExpenseType[];
+  filteredData: ExpenseType[];
+  filters: FiltersType;
 }
 
 export type RootStackParamListType = {

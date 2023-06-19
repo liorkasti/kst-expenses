@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useRef, useState} from 'react';
 import {
-  Alert,
   Image,
   SectionList,
   StyleSheet,
@@ -14,25 +13,24 @@ import {useDispatch, useSelector} from 'react-redux';
 import closeIcon from '../assets/close.png';
 import filterIcon from '../assets/filter.png';
 import BottomModal from '../components/BottomModal';
-import FilterExpenses from '../components/FilterExpenses';
-import {filterStr, filtersStr, totalExpensesStr} from '../constants';
+import ExpenseEditor from '../components/ExpenseEditor';
 import {
-  deleteExpense,
-  filteredData,
-  setFilterDate,
-  setFilterTitle,
-} from '../redux/slices/expenses-slice';
-import {RootStateType} from '../redux/types';
-import {ExpenseType, ExpenseSectionType} from '../redux/types';
+  clearFilterString,
+  filtersStr,
+  filterStr,
+  HIT_SLOP_10,
+  totalExpensesStr,
+} from '../constants';
+import {clearFilterData, deleteExpense} from '../redux/slices/expenses-slice';
+import {ExpenseSectionType, ExpenseType, RootStateType} from '../redux/types';
 import {COLORS} from '../utils/constance';
-import moment from 'moment';
 
 const HomeScreen = () => {
   const filteredExpensesRef = useRef([] as ExpenseType[]);
   const [isFiltersModalVisible, setFiltersModalVisible] = useState(false);
 
   const dispatch = useDispatch();
-  const {expenses, filters} = useSelector(
+  const {expenses, filteredData} = useSelector(
     (state: RootStateType) => state.expenses,
   );
 
@@ -49,33 +47,11 @@ const HomeScreen = () => {
     }
   };
 
-  const handleClearFilters = () => {
-    dispatch(setFilterTitle(''));
-    dispatch(setFilterDate(null));
-  };
-
   const handleFilteredExpenses = () => {
-    let filteredExpenses = expenses;
-    const {title, date} = filters;
-
-    if (title && date) {
-      filteredExpenses = filteredExpenses.filter(
-        expense =>
-          expense?.date === date &&
-          expense.title.toLowerCase().includes(title.toLowerCase()),
-      );
-    } else if (title) {
-      filteredExpenses = filteredExpenses.filter(expense =>
-        expense.title.toLowerCase().includes(title.toLowerCase()),
-      );
-    } else if (date) {
-      filteredExpenses = filteredExpenses.filter(
-        expense => expense?.date === date,
-      );
-    }
-    if (filteredExpenses.length > 0) {
-      filteredExpensesRef.current = filteredExpenses;
+    if (filteredData.length > 0) {
+      filteredExpensesRef.current = filteredData;
     } else {
+      clearFilterData();
       filteredExpensesRef.current = expenses;
     }
   };
@@ -94,28 +70,16 @@ const HomeScreen = () => {
         currentSection.data.push(expense);
       }
     });
-
+    //TODO: screen a label of the filters chosen with a remove badge on them
     return (
       <SectionList
         sections={expenseSections}
         keyExtractor={(item, index) => item.id + index}
-        ItemSeparatorComponent={() => (
-          <View style={{borderBottomWidth: 0.25}} />
-        )}
+        ItemSeparatorComponent={Separator}
         renderItem={({item}) => (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingHorizontal: 16,
-              height: 62,
-            }}>
+          <View style={styles.sectionContainer}>
             <TouchableOpacity onPress={() => handleDeleteExpense(item.id)}>
-              <Image
-                source={closeIcon}
-                style={{width: 20, height: 20, marginRight: 10}}
-              />
+              <Image source={closeIcon} style={styles.removeIcon} />
             </TouchableOpacity>
             <Text style={styles.paymentTitle}>{item.title}</Text>
             <Text style={styles.paymentTitle}>{item.amount}</Text>
@@ -126,6 +90,11 @@ const HomeScreen = () => {
         )}
       />
     );
+  };
+
+  const onClear = (): void => {
+    dispatch(clearFilterData());
+    filteredExpensesRef.current = expenses;
   };
 
   return (
@@ -144,6 +113,14 @@ const HomeScreen = () => {
               <Image source={filterIcon} style={styles.containerIcon} />
               <Text style={styles.filterText}>{filterStr}</Text>
             </TouchableOpacity>
+            {filteredData.length > 0 && (
+              <TouchableOpacity
+                style={styles.clearFilterButton}
+                onPress={onClear}
+                hitSlop={HIT_SLOP_10}>
+                <Text style={styles.clearFilterText}>{clearFilterString}</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -154,9 +131,9 @@ const HomeScreen = () => {
           title={filtersStr}
           visible={isFiltersModalVisible}
           onClose={() => setFiltersModalVisible(!isFiltersModalVisible)}>
-          <FilterExpenses
-            onFilter={() => setFiltersModalVisible(!isFiltersModalVisible)}
-            onClearFilters={handleClearFilters}
+          <ExpenseEditor
+            isFilterEditor={true}
+            onClose={() => setFiltersModalVisible(!isFiltersModalVisible)}
           />
         </BottomModal>
       )}
@@ -164,12 +141,22 @@ const HomeScreen = () => {
   );
 };
 
+const Separator = () => <View style={styles.separator} />;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
   },
   topWrapper: {paddingHorizontal: 16},
+  separator: {borderBottomWidth: 0.25},
+  sectionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    height: 62,
+  },
   totalTile: {
     color: COLORS.title,
     paddingRight: 3,
@@ -186,6 +173,12 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 4,
+  },
+  removeIcon: {width: 20, height: 20, marginRight: 10},
+  clearFilterButton: {},
+  clearFilterText: {
+    padding: 10,
+    color: COLORS.thirdary,
   },
   filterButton: {
     flexDirection: 'row',

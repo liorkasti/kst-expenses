@@ -31,24 +31,11 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
         <Text style={styles.text}>{totalExpensesItemsStr}</Text>
         <Text style={styles.total}>{expenses.length}</Text>
       </View>
-      <View
-        style={{
-          borderBottomWidth: 1,
-          borderBottomColor: '#ccc',
-          marginTop: -20,
-        }}
-      />
+      <View style={styles.separator} />
       <TouchableOpacity onPress={handleSignout}>
         <Text style={styles.text}>{signOutStr}</Text>
       </TouchableOpacity>
-
-      <View
-        style={{
-          borderBottomWidth: 1,
-          borderBottomColor: '#ccc',
-          marginTop: -20,
-        }}
-      />
+      <View style={styles.separator} />
     </View>
   );
 };
@@ -75,6 +62,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 17,
     color: COLORS.title,
+  },
+  separator: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    marginTop: -20,
   },
 });
 

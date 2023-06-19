@@ -1,11 +1,11 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useState} from 'react';
+import React, {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useState} from 'react';
 import {Image, Platform, Text, TouchableOpacity, View} from 'react-native';
 import 'react-native-gesture-handler';
 
 import plus from '../assets/plusExpense.png';
-import AddExpense from '../components/AddExpense';
 import BottomModal from '../components/BottomModal';
+import ExpenseEditor from '../components/ExpenseEditor';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import {COLORS} from '../utils/constance';
@@ -42,8 +42,8 @@ const AppNavigation = () => {
         }}
       />
       <Tab.Screen
-        name={'AddExpense'}
-        component={AddExpense}
+        name={'ExpenseEditor'}
+        component={ExpenseEditor}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
@@ -74,7 +74,10 @@ const AppNavigation = () => {
                 title={'Create Expense'}
                 visible={isModalOpen}
                 onClose={() => setIsModalOpen(!isModalOpen)}>
-                <AddExpense onClose={handleCloseModal} />
+                <ExpenseEditor
+                  isFilterEditor={false}
+                  onClose={handleCloseModal}
+                />
               </BottomModal>
             </View>
           ),

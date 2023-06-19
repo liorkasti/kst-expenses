@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 import {
   Image,
   Modal,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -10,11 +9,12 @@ import {
 } from 'react-native';
 
 import closeIcon from '../assets/close.png';
-import {HIT_SLOP_10, hightStatusBar} from '../constants';
+import {hightStatusBar, HIT_SLOP_10} from '../constants';
+import {useModalTopPadding} from '../hooks';
 import {COLORS} from '../utils/constance';
 
 type BottomModalProps = {
-  visible?: boolean;
+  visible: boolean;
   onClose: () => void;
   children?: any;
   title: string;
@@ -26,14 +26,7 @@ const BottomModal: FC<BottomModalProps> = ({
   visible,
   title,
 }) => {
-  const modalTopPadding: number = //TODO: hook
-    title === 'Filters'
-      ? Platform.OS === 'ios'
-        ? 210
-        : 188
-      : Platform.OS === 'ios'
-      ? 90
-      : 60;
+  const modalTopPadding = useModalTopPadding(title);
 
   return (
     <Modal

@@ -1,21 +1,15 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {ExpenseSectionType, RootStateType} from '../types';
+import {ExpenseSectionType, ExpensesStateType, RootStateType} from '../types';
 import {ExpenseType, FiltersType} from '../types';
 import {Alert} from 'react-native';
 import moment from 'moment';
-
-interface ExpensesState {
-  expenses: ExpenseType[];
-  filteredData: ExpenseType[];
-  filters: FiltersType;
-}
 
 const d1 = moment(new Date(2023, 5, 17)).format('DD.MM.YYYY');
 const d2 = moment(new Date(2023, 5, 18)).format('DD.MM.YYYY');
 const d3 = moment(new Date(2023, 2, 3)).format('DD.MM.YYYY');
 const d4 = moment(new Date(2023, 0, 1)).format('DD.MM.YYYY');
 
-const initialState: ExpensesState = {
+const initialState: ExpensesStateType = {
   expenses: [
     {amount: 33, date: d1, id: '1684244219970', title: 'T1'},
     {amount: 33, date: d1, id: '1684244219971', title: 'T1'},
@@ -31,7 +25,7 @@ const initialState: ExpensesState = {
   filteredData: [],
   filters: {
     title: '',
-    date: null,
+    date: '',
   },
 };
 
@@ -51,47 +45,46 @@ const expensesSlice = createSlice({
       state.expenses = state.expenses.filter(
         expense => expense.id !== expenseId,
       );
+      state.filteredData = state.filteredData.filter(
+        expense => expense.id !== expenseId,
+      );
     },
     setFilterTitle: (state, action: PayloadAction<string | ''>) => {
       state.filters.title = action.payload;
     },
-    setFilterDate: (state, action: PayloadAction<Date | null>) => {
+    setFilterDate: (state, action: PayloadAction<string | ''>) => {
       state.filters.date = action.payload;
     },
     clearFilters: state => {
       state.filters.title = '';
-      state.filters.date = null;
+      state.filters.date = '';
     },
-    //TODO: use immer js and finish this..
+    clearFilterData: state => {
+      state.filteredData = [];
+    },
     filterExpenses: state => {
       try {
         const {title, date} = state.filters;
+        let {filteredData, expenses} = state;
+        filteredData = expenses;
         if (title && date) {
-          console.log('date', date);
-          state.filteredData = expenses.filter(
+          filteredData = filteredData.filter(
             expense =>
               expense?.date === date &&
               expense.title.toLowerCase().includes(title.toLowerCase()),
           );
         }
         if (title) {
-          state.filteredData = expenses.filter((expense: ExpenseType) =>
+          filteredData = filteredData.filter((expense: ExpenseType) =>
             expense.title.toLowerCase().includes(title.toLowerCase()),
           );
         }
-
         if (date) {
-          console.log('date', date);
-          state.filteredData = expenses.filter(
-            expense => expense?.date === date,
-          );
+          filteredData = filteredData.filter(expense => expense?.date === date);
         }
-        console.log(filteredData);
-
+        state.filteredData = filteredData;
         if (filteredData.length < 1) {
           Alert.alert('Sorry!', 'No results found.');
-        } else {
-          return filteredData;
         }
       } catch (error) {
         console.log('Filter Expenses Error', error);
@@ -100,35 +93,14 @@ const expensesSlice = createSlice({
   },
 });
 
-export const selectFilteredExpenses = (state: RootState) => {
-  const {title, date} = state.expenses.filters;
-  return state.expenses.expenses.filter(expense => {
-    let isTitleMatch = true;
-    let isDateMatch = true;
-
-    if (title) {
-      isTitleMatch = expense.title.toLowerCase().includes(title.toLowerCase());
-    }
-
-    if (date) {
-      isDateMatch =
-        expense.date.getFullYear() === date.getFullYear() &&
-        expense.date.getMonth() === date.getMonth() &&
-        expense.date.getDate() === date.getDate();
-    }
-
-    return isTitleMatch && isDateMatch;
-  });
-};
-
 export const {
-  filteredData,
   addExpense,
   deleteExpense,
   setFilterTitle,
   setFilterDate,
   clearFilters,
   filterExpenses,
+  clearFilterData,
 } = expensesSlice.actions;
 
 export default expensesSlice.reducer;

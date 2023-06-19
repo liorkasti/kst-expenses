@@ -1,4 +1,7 @@
-export const formattedDate = (dateFilter: Date | null): string => {
+import {Platform} from 'react-native';
+import {filtersStr} from '../constants';
+
+export const useFormattedDate = (dateFilter: Date | null): string => {
   if (dateFilter === null) {
     return '';
   }
@@ -14,3 +17,12 @@ export const formattedDate = (dateFilter: Date | null): string => {
 
   return formatted;
 };
+
+export const useModalTopPadding = (title: string): number =>
+  title === filtersStr
+    ? Platform.OS === 'ios'
+      ? 210
+      : 188
+    : Platform.OS === 'ios'
+    ? 90
+    : 60;
