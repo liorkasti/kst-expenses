@@ -23,7 +23,7 @@ import {
 } from '../constants';
 import {clearFilterData, deleteExpense} from '../redux/slices/expenses-slice';
 import {ExpenseSectionType, ExpenseType, RootStateType} from '../redux/types';
-import {COLORS} from '../utils/constance';
+import {COLORS} from '../constants/theme';
 
 const HomeScreen = () => {
   const filteredExpensesRef = useRef([] as ExpenseType[]);

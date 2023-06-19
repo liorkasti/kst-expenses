@@ -13,3 +13,5 @@ const colorPalette = {
   inputBorder: '#BFBFBF',
 };
 export const COLORS = colorPalette;
+
+export const STYLES = {};

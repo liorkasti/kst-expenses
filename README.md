@@ -29,10 +29,10 @@ Enjoy! thank you.
 
 ### TODOs:
 
-- [ ] ExpenseEditor input data validate.
 - [ ] Add testing.
 - [ ] Add index types for assets.
 - [ ] Upgrade theming.
+- [x] ExpenseEditor input data validate.
 - [x] Enhance filter logic.
 - [x] Add a modal filter by title and date.
 - [x] Screens expenses data and total spend provided by the user.

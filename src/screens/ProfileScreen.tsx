@@ -7,7 +7,7 @@ import {signOutStr, totalExpensesItemsStr} from '../constants';
 import {removeUser} from '../redux/slices/user-slice';
 import {RootStateType} from '../redux/types';
 import {RootStackParamListType} from '../redux/types';
-import {COLORS} from '../utils/constance';
+import {COLORS} from '../constants/theme';
 
 type ProfileScreenProps = {
   navigation: NativeStackNavigationProp<

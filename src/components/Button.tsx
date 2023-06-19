@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {COLORS} from '../utils/constance';
+import {COLORS} from '../constants/theme';
 
 type ButtonProps = {
   onButtonPress: () => void;

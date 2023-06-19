@@ -5,7 +5,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Button from '../components/Button';
 import useLogin from '../hooks/useLogin';
 import {RootStackParamListType} from '../redux/types';
-import {COLORS} from '../utils/constance';
+import {COLORS} from '../constants/theme';
 
 interface WelcomeScreenProps {
   navigation: NativeStackNavigationProp<

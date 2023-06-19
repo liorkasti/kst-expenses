@@ -30,7 +30,7 @@ import {
   setFilterTitle,
 } from '../redux/slices/expenses-slice';
 import {ExpenseType} from '../redux/types';
-import {COLORS} from '../utils/constance';
+import {COLORS} from '../constants/theme';
 import Button from './Button';
 
 interface ExpenseEditorProps {
@@ -69,14 +69,15 @@ const ExpenseEditor: FC<ExpenseEditorProps> = ({onClose, isFilterEditor}) => {
       if (amountError) {
         Alert.alert(amountError);
       }
-      if (validateInputs() && title && amount) {
+      if (validateInputs() && title && amount && date) {
+        const newExpense: ExpenseType = {
+          id: Date.now().toString(),
+          title,
+          amount: parseFloat(amount),
+          date,
+        };
+        //TODO: date validation into hook
         if (date) {
-          const newExpense: ExpenseType = {
-            id: Date.now().toString(),
-            title,
-            amount: parseFloat(amount),
-            date,
-          };
         } else {
           Alert.alert('Invalid date');
         }

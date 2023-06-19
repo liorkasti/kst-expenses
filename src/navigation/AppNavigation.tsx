@@ -8,7 +8,7 @@ import BottomModal from '../components/BottomModal';
 import ExpenseEditor from '../components/ExpenseEditor';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import {COLORS} from '../utils/constance';
+import {COLORS} from '../constants/theme';
 
 const Tab = createBottomTabNavigator();
 

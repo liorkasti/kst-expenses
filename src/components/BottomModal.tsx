@@ -11,7 +11,7 @@ import {
 import closeIcon from '../assets/close.png';
 import {hightStatusBar, HIT_SLOP_10} from '../constants';
 import {useModalTopPadding} from '../hooks';
-import {COLORS} from '../utils/constance';
+import {COLORS} from '../constants/theme';
 
 type BottomModalProps = {
   visible: boolean;

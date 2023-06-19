@@ -1,16 +1,14 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useState} from 'react';
+import {Alert} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {storeUser} from '../redux/slices/user-slice';
-import useNameValidation from './useInputValidation';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Alert} from 'react-native';
 import useInputValidation from './useInputValidation';
 
 const useLogin = () => {
-  const {name, setName, nameError, validateInputs} = useInputValidation();
+  const {name, setName, validateInputs} = useInputValidation();
   const [id, setId] = useState('');
   const dispatch = useDispatch();
-  const isValidName = useNameValidation(name);
 
   const handleLoginPress = async () => {
     if (validateInputs()) {
