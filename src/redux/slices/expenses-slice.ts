@@ -1,6 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {ExpenseSectionType, ExpensesStateType, RootStateType} from '../types';
-import {ExpenseType, FiltersType} from '../types';
+import {ExpenseType, ExpensesStateType} from '../types';
 import {Alert} from 'react-native';
 import moment from 'moment';
 
@@ -35,7 +34,7 @@ const expensesSlice = createSlice({
   reducers: {
     addExpense: (state, action: PayloadAction<ExpenseType>) => {
       const newExpense = action.payload;
-      state.expenses.push(newExpense);
+      state.expenses = [...state.expenses, newExpense];
       state.expenses.sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
       );
@@ -65,24 +64,25 @@ const expensesSlice = createSlice({
     filterExpenses: state => {
       try {
         const {title, date} = state.filters;
-        let {filteredData, expenses} = state;
-        filteredData = expenses;
+        const {expenses} = state;
+        let filteredData = [...expenses]; // TODO: use immer
+
         if (title && date) {
           filteredData = filteredData.filter(
             expense =>
               expense?.date === date &&
               expense.title.toLowerCase().includes(title.toLowerCase()),
           );
-        }
-        if (title) {
-          filteredData = filteredData.filter((expense: ExpenseType) =>
+        } else if (title) {
+          filteredData = filteredData.filter(expense =>
             expense.title.toLowerCase().includes(title.toLowerCase()),
           );
-        }
-        if (date) {
+        } else if (date) {
           filteredData = filteredData.filter(expense => expense?.date === date);
         }
+
         state.filteredData = filteredData;
+
         if (filteredData.length < 1) {
           Alert.alert('Sorry!', 'No results found.');
         }
