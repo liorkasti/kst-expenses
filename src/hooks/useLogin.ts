@@ -18,25 +18,28 @@ const useLogin = () => {
           const {id: storedId, name: storedName} = JSON.parse(storedUser);
           setId(storedId);
           setName(storedName);
-          dispatch(storeUser({userName: name, id: id}));
+          dispatch(storeUser({userName: storedName, id: storedId}));
         }
       } catch (error) {
         console.error(error);
         Alert.alert('Failed to retrieve user data');
       }
-      console.log('name', name);
     };
-
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(storeUser({userName: name, id: id}));
+    }
+  }, [id, dispatch, name]);
 
   const handleLoginPress = async () => {
     if (validateInputs()) {
       try {
-        const userId = Math.random().toString(36).substr(2, 5); // Generate a random ID
+        const userId = Math.random().toString(36).substr(2, 5);
         await AsyncStorage.setItem('user', JSON.stringify({id: userId, name}));
         setId(userId);
-        dispatch(storeUser({userName: name, id: id}));
       } catch (error) {
         console.error(error);
         Alert.alert('Failed to save user data');
