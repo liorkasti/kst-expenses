@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {storeUser} from '../redux/slices/user-slice';
@@ -9,6 +9,26 @@ const useLogin = () => {
   const {name, setName, validateInputs} = useInputValidation();
   const [id, setId] = useState('');
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const storedUser = await AsyncStorage.getItem('user');
+        if (storedUser) {
+          const {id: storedId, name: storedName} = JSON.parse(storedUser);
+          setId(storedId);
+          setName(storedName);
+          dispatch(storeUser({userName: name, id: id}));
+        }
+      } catch (error) {
+        console.error(error);
+        Alert.alert('Failed to retrieve user data');
+      }
+      console.log('name', name);
+    };
+
+    fetchUser();
+  }, []);
 
   const handleLoginPress = async () => {
     if (validateInputs()) {
