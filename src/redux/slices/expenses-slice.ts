@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {ExpenseType, ExpensesStateType} from '../types';
 import {Alert} from 'react-native';
 import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const d1 = moment(new Date(2023, 5, 17)).format('DD.MM.YYYY');
 const d2 = moment(new Date(2023, 5, 18)).format('DD.MM.YYYY');
@@ -65,7 +66,7 @@ const expensesSlice = createSlice({
       try {
         const {title, date} = state.filters;
         const {expenses} = state;
-        let filteredData = [...expenses]; // TODO: use immer
+        let filteredData = [...expenses]; // TODO: use immer js
 
         if (title && date) {
           filteredData = filteredData.filter(
@@ -102,5 +103,14 @@ export const {
   filterExpenses,
   clearFilterData,
 } = expensesSlice.actions;
+
+export const updateLocalStorage = async (expenses: ExpenseType[]) => {
+  try {
+    await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
+    // console.log(await AsyncStorage.getItem('expenses'));
+  } catch (error) {
+    console.log('Error updating local storage:', error);
+  }
+};
 
 export default expensesSlice.reducer;

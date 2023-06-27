@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {amountRegex, nameRegex} from '.';
 
 const useInputValidation = () => {
   const [name, setName] = useState('');
@@ -12,8 +13,7 @@ const useInputValidation = () => {
     let isValid = true;
 
     if (name) {
-      const regex = /^[A-Za-z]{3,20}$/;
-      if (!regex.test(name.trim())) {
+      if (!nameRegex.test(name.trim())) {
         setNameError('Name is required');
         isValid = false;
       } else {
@@ -30,11 +30,10 @@ const useInputValidation = () => {
       }
 
       // Amount validation
-      const amountRegex = /^\d+(\.\d{1,2})?$/; // Regex for valid numeric input with up to 2 decimal places
       if (amount.trim() === '') {
         setAmountError('Amount is required\nPlease enter a number');
         isValid = false;
-      } else if (!amountRegex.test(amount)) {
+      } else if (!amountRegex.test(amount.trim())) {
         setAmountError('Invalid amount');
         isValid = false;
       } else {

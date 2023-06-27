@@ -1,6 +1,18 @@
 import {Platform} from 'react-native';
 import {filtersStr} from '../constants';
 
+export const nameRegex = /^[A-Za-z]{3,20}$/;
+export const amountRegex = /^\d+(\.\d{1,2})?$/;
+
+export const useModalTopPadding = (title: string): number =>
+  title === filtersStr
+    ? Platform.OS === 'ios'
+      ? 210
+      : 188
+    : Platform.OS === 'ios'
+    ? 90
+    : 60;
+
 export const useFormattedDate = (dateFilter: Date | null): string => {
   if (dateFilter === null) {
     return '';
@@ -17,12 +29,3 @@ export const useFormattedDate = (dateFilter: Date | null): string => {
 
   return formatted;
 };
-
-export const useModalTopPadding = (title: string): number =>
-  title === filtersStr
-    ? Platform.OS === 'ios'
-      ? 210
-      : 188
-    : Platform.OS === 'ios'
-    ? 90
-    : 60;

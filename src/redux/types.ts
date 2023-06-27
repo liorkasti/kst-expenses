@@ -15,7 +15,6 @@ export interface ExpenseType {
 
 export interface ExpensesStateType {
   expenses: ExpenseType[];
-  expenses: ExpenseType[];
   filters: FiltersType;
 }
 export interface ExpenseSectionType {

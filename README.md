@@ -29,9 +29,6 @@ Enjoy! thank you.
 
 ### TODOs:
 
-- [ ] Add testing.
-- [ ] Add index types for assets.
-- [ ] Upgrade theming.
 - [x] ExpenseEditor input data validate.
 - [x] Enhance filter logic.
 - [x] Add a modal filter by title and date.

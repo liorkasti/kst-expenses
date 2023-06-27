@@ -1,5 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Image,
   SectionList,
@@ -10,20 +9,17 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
-import closeIcon from '../assets/close.png';
-import filterIcon from '../assets/filter.png';
+import {closeIcon, filterIcon} from '../assets';
 import BottomModal from '../components/BottomModal';
 import ExpenseEditor from '../components/ExpenseEditor';
 import {
-  clearFilterString,
-  filtersStr,
-  filterStr,
-  HIT_SLOP_10,
-  totalExpensesStr,
-} from '../constants';
-import {clearFilterData, deleteExpense} from '../redux/slices/expenses-slice';
+  clearFilterData,
+  deleteExpense,
+  updateLocalStorage,
+} from '../redux/slices/expenses-slice';
 import {ExpenseSectionType, ExpenseType, RootStateType} from '../redux/types';
 import {COLORS} from '../constants/theme';
+import {HIT_SLOP_10} from '../constants';
 
 const HomeScreen = () => {
   const filteredExpensesRef = useRef([] as ExpenseType[]);
@@ -34,101 +30,102 @@ const HomeScreen = () => {
     (state: RootStateType) => state.expenses,
   );
 
-  const handleDeleteExpense = (expenseId: string) => {
-    dispatch(deleteExpense(expenseId));
-    updateLocalStorage();
-  };
+  const handleDeleteExpense = useCallback(
+    async (expenseId: string) => {
+      dispatch(deleteExpense(expenseId));
+    },
+    [dispatch],
+  );
 
-  const updateLocalStorage = async () => {
-    try {
-      await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
-    } catch (error) {
-      console.log('Error updating local storage:', error);
-    }
-  };
+  useEffect(() => {
+    updateLocalStorage(expenses);
+  }, [expenses]);
 
-  const handleFilteredExpenses = () => {
-    if (filteredData.length > 0) {
-      filteredExpensesRef.current = filteredData;
-    } else {
-      clearFilterData();
-      filteredExpensesRef.current = expenses;
-    }
-  };
-
-  const onClear = (): void => {
+  const onClear = useCallback(() => {
     dispatch(clearFilterData());
     filteredExpensesRef.current = expenses;
-  };
+  }, [dispatch, expenses]);
 
-  const renderExpenseSections = () => {
-    handleFilteredExpenses();
-    const expenseSections: ExpenseSectionType[] = [];
+  const renderExpenseItem = useCallback(
+    ({item}: {item: ExpenseType}) => (
+      <View style={styles.sectionContainer}>
+        <TouchableOpacity onPress={() => handleDeleteExpense(item.id)}>
+          <Image source={closeIcon} style={styles.removeIcon} />
+        </TouchableOpacity>
+        <Text style={styles.paymentTitle}>{item.title}</Text>
+        <Text style={styles.paymentTitle}>{item.amount}</Text>
+      </View>
+    ),
+    [handleDeleteExpense],
+  );
+
+  const renderSectionHeader = useCallback(
+    ({section: {title}}: {section: {title: string}}) => (
+      <Text style={styles.sectionHeader}>{title}</Text>
+    ),
+    [],
+  );
+
+  const expenseSections = useMemo(() => {
+    filteredExpensesRef.current =
+      filteredData.length > 0 ? filteredData : expenses;
+
+    const sections: ExpenseSectionType[] = [];
     let currentSection: {title: string; data: ExpenseType[]} | null = null;
 
     filteredExpensesRef.current.forEach(expense => {
       const expenseDate = expense.date;
       if (!currentSection || currentSection.title !== expenseDate) {
         currentSection = {title: expenseDate, data: [expense]};
-        expenseSections.push(currentSection);
+        sections.push(currentSection);
       } else {
         currentSection.data.push(expense);
       }
     });
-    //TODO: screen a label of the filters chosen with a remove badge on them
-    return (
-      <SectionList
-        sections={expenseSections}
-        keyExtractor={(item, index) => item.id + index}
-        ItemSeparatorComponent={Separator}
-        renderItem={({item}) => (
-          <View style={styles.sectionContainer}>
-            <TouchableOpacity onPress={() => handleDeleteExpense(item.id)}>
-              <Image source={closeIcon} style={styles.removeIcon} />
-            </TouchableOpacity>
-            <Text style={styles.paymentTitle}>{item.title}</Text>
-            <Text style={styles.paymentTitle}>{item.amount}</Text>
-          </View>
-        )}
-        renderSectionHeader={({section: {title}}) => (
-          <Text style={styles.sectionHeader}>{title}</Text>
-        )}
-      />
-    );
-  };
+
+    return sections;
+  }, [expenses, filteredData]);
+
+  const totalExpenses = useMemo(
+    () => expenses.reduce((total, expense) => total + expense.amount, 0),
+    [expenses],
+  );
 
   return (
     <>
       <View style={styles.container}>
         <View style={styles.topWrapper}>
-          <Text style={styles.totalTile}>
-            {totalExpensesStr}
-            {expenses.reduce((total, expense) => total + expense.amount, 0)}
-          </Text>
+          <Text style={styles.totalTile}>Total Expenses: {totalExpenses}</Text>
 
           <View style={styles.filterWrapper}>
             <TouchableOpacity
               style={styles.filterButton}
               onPress={() => setFiltersModalVisible(!isFiltersModalVisible)}>
               <Image source={filterIcon} style={styles.containerIcon} />
-              <Text style={styles.filterText}>{filterStr}</Text>
+              <Text style={styles.filterText}>Filter</Text>
             </TouchableOpacity>
             {filteredData.length > 0 && (
               <TouchableOpacity
                 style={styles.clearFilterButton}
                 onPress={onClear}
                 hitSlop={HIT_SLOP_10}>
-                <Text style={styles.clearFilterText}>{clearFilterString}</Text>
+                <Text style={styles.clearFilterText}>Clear Filter</Text>
               </TouchableOpacity>
             )}
           </View>
         </View>
 
-        {renderExpenseSections()}
+        <SectionList
+          sections={expenseSections}
+          keyExtractor={(item, index) => item.id + index}
+          ItemSeparatorComponent={Separator}
+          renderItem={renderExpenseItem}
+          renderSectionHeader={renderSectionHeader}
+        />
       </View>
       {isFiltersModalVisible && (
         <BottomModal
-          title={filtersStr}
+          title="Filters"
           visible={isFiltersModalVisible}
           onClose={() => setFiltersModalVisible(!isFiltersModalVisible)}>
           <ExpenseEditor

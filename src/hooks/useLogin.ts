@@ -26,7 +26,7 @@ const useLogin = () => {
       }
     };
     fetchUser();
-  }, []);
+  }, [dispatch, setName]);
 
   useEffect(() => {
     if (id) {

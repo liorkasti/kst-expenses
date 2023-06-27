@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {Image, Platform, Text, TouchableOpacity, View} from 'react-native';
 import 'react-native-gesture-handler';
 
-import plus from '../assets/plusExpense.png';
+import {plusIcon} from '../assets';
 import BottomModal from '../components/BottomModal';
 import ExpenseEditor from '../components/ExpenseEditor';
 import HomeScreen from '../screens/HomeScreen';
@@ -60,7 +60,7 @@ const AppNavigation = () => {
                     marginBottom: Platform.OS == 'android' ? 80 : 50,
                   }}>
                   <Image
-                    source={plus}
+                    source={plusIcon}
                     style={{
                       width: 32,
                       height: 32,
