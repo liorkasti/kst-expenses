@@ -1,5 +1,6 @@
 ## Description:
-A react-native app that screens users from randomuser.me API and can CRUD a user using Redux.
+
+A streamlined mobile application developed using React Native, Typescript, and Redux. The application is designed for list book expense management sectioned by dates and within an intuitive form modal user interface. Users can create a local account and effortlessly modify, and track all the book expenses and total amount.
 
 ### Installation:
 
@@ -26,13 +27,3 @@ A react-native app that screens users from randomuser.me API and can CRUD a user
     ```
 
 Enjoy! thank you.
-
-### TODOs:
-
-- [x] ExpenseEditor input data validate.
-- [x] Enhance filter logic.
-- [x] Add a modal filter by title and date.
-- [x] Screens expenses data and total spend provided by the user.
-- [x] Add ability to create or remove expense.
-- [x] Profile screen for logout.
-- [x] Welcome screen for login.
